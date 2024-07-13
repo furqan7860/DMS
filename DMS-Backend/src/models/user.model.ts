@@ -1,7 +1,7 @@
 import { User as BaseUser } from '@loopback/authentication-jwt';
 import { model, property, hasMany } from '@loopback/repository';
 import { PatientHistory } from './patient-history.model';
-import { Scan } from './scans.models';
+import { Scan } from './scans.model';
 
 @model()
 export class User extends BaseUser {
@@ -14,6 +14,11 @@ export class User extends BaseUser {
     type: 'string',
   })
   password?: string;
+
+  @property({
+    type: 'boolean',
+  })
+  active?: boolean;
 
   @hasMany(() => PatientHistory)
   updatedHistories: PatientHistory[];

@@ -8,3 +8,4 @@ export * from './patient-history.repository';
 export * from './patient.repository';
 export * from './scans.repository';
 export * from './user.repository';
+export * from './case.repository';

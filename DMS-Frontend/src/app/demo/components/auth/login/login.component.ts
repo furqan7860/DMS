@@ -34,7 +34,15 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem("user", JSON.stringify(data));
                 this.router.navigate(["/"]);
             }
-        }), catchError((err:any) => {
+        })
+        , tap(() => {
+            this.userControllerService.whoAmI().subscribe((data:any) => {
+                const user = JSON.parse(localStorage.getItem("user")) || {};
+                localStorage.setItem("user", JSON.stringify({...user, ...data}))
+            });
+        })
+        , catchError((err:any) => {
+            console.log('err: ', err);
             alert('Invalid Credentials');
             localStorage.clear();
             throw err;

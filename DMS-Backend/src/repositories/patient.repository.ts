@@ -1,5 +1,5 @@
-import { DefaultCrudRepository, HasManyRepositoryFactory, repository } from '@loopback/repository';
-import { Patient, PatientRelations, PatientHistory, Scan } from '../models';
+import { BelongsToAccessor, DefaultCrudRepository, HasManyRepositoryFactory, repository } from '@loopback/repository';
+import { Patient, PatientRelations, PatientHistory, Scan, User } from '../models';
 import { DbDataSource } from '../datasources';
 import { inject, Getter } from '@loopback/core';
 import { PatientHistoryRepository } from './patient-history.repository';
@@ -19,6 +19,11 @@ export class PatientRepository extends DefaultCrudRepository<
     Scan,
     typeof Patient.prototype.id
   >;
+
+  public readonly userId: BelongsToAccessor<
+  User,
+  typeof Patient.prototype.id
+>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,

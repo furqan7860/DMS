@@ -10,4 +10,5 @@ export interface NewPatient {
   gender?: string;
   name: string;
   notes?: string;
+  userId?: string;
 }

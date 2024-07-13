@@ -8,9 +8,11 @@ import { UserCredentialsWithRelations } from '../models/user-credentials-with-re
  * (tsType: UserWithRelations, schemaOptions: { includeRelations: true })
  */
 export interface UserWithRelations {
+  active?: boolean;
   email: string;
   emailVerified?: boolean;
   id?: string;
+  password?: string;
   realm?: string;
   role?: string;
   updatedHistories?: Array<PatientHistoryWithRelations>;

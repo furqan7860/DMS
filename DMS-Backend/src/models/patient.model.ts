@@ -1,6 +1,7 @@
-import { Entity, model, property, hasMany } from '@loopback/repository';
-import { Scan } from './scans.models';
+import { Entity, model, property, hasMany, belongsTo } from '@loopback/repository';
+import { Scan } from './scans.model';
 import { PatientHistory } from './patient-history.model';
+import { User } from './user.model';
 
 @model()
 export class Patient extends Entity {
@@ -38,6 +39,9 @@ export class Patient extends Entity {
     type: 'boolean',
   })
   deleted?: boolean;
+
+  @belongsTo(() => User)
+  userId: string;
 
   @hasMany(() => PatientHistory)
   history: PatientHistory[];

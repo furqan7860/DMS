@@ -24,6 +24,7 @@ import path from 'path';
 import { DbDataSource } from './datasources';
 import { MySequence } from './sequence';
 import { PatientHistoryRepository, PatientRepository, ScanRepository } from './repositories';
+import { CaseRepository } from './repositories/case.repository';
 export { ApplicationConfig };
 
 export class TodoListApplication extends BootMixin(
@@ -65,8 +66,9 @@ export class TodoListApplication extends BootMixin(
     this.repository(PatientRepository)
     this.repository(PatientHistoryRepository)
     this.repository(ScanRepository)
+    this.repository(CaseRepository)
     // ------------- END OF SNIPPET -------------
-
+    this.exportOpenApiSpec();
     //new
     this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
   }

@@ -8,3 +8,5 @@ export * from './user.controller';
 export * from './patient.controller';
 export * from './patient-history.controller';
 export * from './scan.controller';
+export * from './scan.controller';
+export * from './case.controller';

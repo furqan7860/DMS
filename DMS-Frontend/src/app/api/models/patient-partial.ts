@@ -11,4 +11,5 @@ export interface PatientPartial {
   id?: number;
   name?: string;
   notes?: string;
+  userId?: string;
 }

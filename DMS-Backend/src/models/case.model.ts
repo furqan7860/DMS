@@ -1,7 +1,8 @@
 
 
 import { Entity, model, property, hasOne, belongsTo } from '@loopback/repository';
-import { Patient, User } from '.';
+import { Patient } from './patient.model';
+import { User } from './user.model';
 
 @model()
 export class Case extends Entity {

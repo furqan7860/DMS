@@ -7,5 +7,5 @@ export * from './todo.model';
 export * from './patient-history.model';
 export * from './user.model';
 export * from './patient.model';
-export * from './scans.models';
+export * from './scans.model';
 export * from './case.model';

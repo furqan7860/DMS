@@ -7,4 +7,5 @@ export interface Patient {
   id?: number;
   name: string;
   notes?: string;
+  userId?: string;
 }
