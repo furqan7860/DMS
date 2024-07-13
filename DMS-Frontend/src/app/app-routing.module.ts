@@ -11,7 +11,7 @@ import { AuthGuard } from './guards/auth.guard';
                 path: '', component: AppLayoutComponent,
                 canActivate: [AuthGuard],
                 children: [
-                    { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
+                    { path: '', canActivate: [AuthGuard],loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
                     { path: 'case', loadChildren: () => import('./demo/components/cases/cases.module').then(m => m.CasesModule) },
                 ]
             },
