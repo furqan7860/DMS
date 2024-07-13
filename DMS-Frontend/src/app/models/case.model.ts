@@ -5,8 +5,11 @@ export interface CaseType {
 
   export class CaseInfo {
     name: string;
-    isFastDelivery: boolean = false;
+    age: number;
+    gender: string;
     caseNotes: string;
-    doctorNotes: string;
+    isFastDelivery: boolean;
     scans: any[];
+    doctorNotes: string;
+    surgicalType: string;
   }

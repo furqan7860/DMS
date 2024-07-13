@@ -31,7 +31,6 @@
         </ng-template>
       </p-card>
   
-  
       <p-card *ngIf="activeIndex === 1" class="form-step">
         <ng-template pTemplate="header">
           <h5 class="mb-0">Case Info</h5>
@@ -47,6 +46,18 @@
                 <div *ngIf="caseForm.submitted && !caseInfo.name" class="p-error">Patient name is required.</div>
               </div>
   
+              <div class="p-field">
+                <label for="age">Age<span class="required-asterisk">*</span></label>
+                <input pInputText type="number" [(ngModel)]="caseInfo.age" name="age" placeholder="Enter Age" required>
+                <div *ngIf="caseForm.submitted && !caseInfo.age" class="p-error">Age is required.</div>
+              </div>
+  
+              <div class="p-field">
+                <label for="gender">Gender<span class="required-asterisk">*</span></label>
+                <input pInputText [(ngModel)]="caseInfo.gender" name="gender" placeholder="Enter Gender" required>
+                <div *ngIf="caseForm.submitted && !caseInfo.gender" class="p-error">Gender is required.</div>
+              </div>
+  
               <div class="notes">
                 <label for="caseNotes">Case Notes/Type of work (e.g., all on x zirconia, design, etc.)<span
                     class="required-asterisk">*</span></label>
@@ -57,7 +68,7 @@
               </div>
   
               <div class="form-group">
-                <span for="deliveryOption">Need your design with in same day?</span>
+                <span for="deliveryOption">Need your design within same day?</span>
                 <div>
                   <p-inputSwitch name="isFastDelivery" (click)="toggleFastDelivery()" />
                   <i class="pi pi-info-circle"></i> <span>Enabling this feature will result in a doubling $200 rush
@@ -125,6 +136,17 @@
               <span id="patientName">{{ caseInfo.name }}</span>
             </div>
   
+            <!-- New Fields -->
+            <div class="p-field">
+              <label for="age">Age:</label>
+              <span id="age">{{ caseInfo.age }}</span>
+            </div>
+  
+            <div class="p-field">
+              <label for="gender">Gender:</label>
+              <span id="gender">{{ caseInfo.gender }}</span>
+            </div>
+  
             <div class="p-field" *ngIf="caseInfo.isFastDelivery">
               <label for="deliveryDate">Delivery Date:</label>
               <span class="fast-delivery">FAST DELIVERY</span>
@@ -152,9 +174,10 @@
         <ng-template pTemplate="footer">
           <div class="navigation-buttons">
             <p-button label="Previous" icon="pi pi-arrow-left" class="prev-button" (onClick)="prev()"></p-button>
-            <p-button label="Submit" (onClick)="next()" icon="pi pi-check" class="submit-button"></p-button>
+            <p-button label="Submit" (onClick)="submit()" icon="pi pi-check" class="submit-button"></p-button>
           </div>
         </ng-template>
       </p-card>
     </div>
   </div>
+  
