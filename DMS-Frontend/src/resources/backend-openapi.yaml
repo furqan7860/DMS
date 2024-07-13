@@ -635,6 +635,99 @@ paths:
         description: The input of login function
         required: true
       operationId: UserController.login
+  /users/{id}:
+    put:
+      x-controller-name: UserController
+      x-operation-name: replaceUserById
+      tags:
+        - UserController
+      responses:
+        '204':
+          description: User PUT success
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        x-parameter-index: 1
+      operationId: UserController.replaceUserById
+    patch:
+      x-controller-name: UserController
+      x-operation-name: updateUserById
+      tags:
+        - UserController
+      responses:
+        '204':
+          description: User PATCH success
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPartial'
+        x-parameter-index: 1
+      operationId: UserController.updateUserById
+    get:
+      x-controller-name: UserController
+      x-operation-name: findUserById
+      tags:
+        - UserController
+      responses:
+        '200':
+          description: User model instance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithRelations'
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      operationId: UserController.findUserById
+    delete:
+      x-controller-name: UserController
+      x-operation-name: deleteUserById
+      tags:
+        - UserController
+      responses:
+        '204':
+          description: User DELETE success
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      operationId: UserController.deleteUserById
+  /users:
+    get:
+      x-controller-name: UserController
+      x-operation-name: findAllUsers
+      tags:
+        - UserController
+      responses:
+        '200':
+          description: Array of User model instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWithRelations'
+      operationId: UserController.findAllUsers
   /whoAmI:
     get:
       x-controller-name: UserController
@@ -718,6 +811,78 @@ components:
         - email
         - password
       additionalProperties: true
+    UserPartial:
+      title: UserPartial
+      type: object
+      description: '(tsType: Partial<User>, schemaOptions: { partial: true })'
+      properties:
+        id:
+          type: string
+        realm:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        emailVerified:
+          type: boolean
+        verificationToken:
+          type: string
+      additionalProperties: true
+      x-typescript-type: Partial<User>
+    UserCredentialsWithRelations:
+      title: UserCredentialsWithRelations
+      type: object
+      description: >-
+        (tsType: UserCredentialsWithRelations, schemaOptions: {
+        includeRelations: true })
+      properties:
+        id:
+          type: string
+        password:
+          type: string
+        userId:
+          type: string
+      required:
+        - password
+        - userId
+      additionalProperties: true
+      x-typescript-type: UserCredentialsWithRelations
+    UserWithRelations:
+      title: UserWithRelations
+      type: object
+      description: '(tsType: UserWithRelations, schemaOptions: { includeRelations: true })'
+      properties:
+        id:
+          type: string
+        realm:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        emailVerified:
+          type: boolean
+        verificationToken:
+          type: string
+        role:
+          type: string
+        password:
+          type: string
+        userCredentials:
+          $ref: '#/components/schemas/UserCredentialsWithRelations'
+        updatedHistories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatientHistoryWithRelations'
+        uploadedDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScanWithRelations'
+      required:
+        - email
+      additionalProperties: true
+      x-typescript-type: UserWithRelations
     Todo:
       title: Todo
       type: object
@@ -824,24 +989,6 @@ components:
         - age
       additionalProperties: false
       x-typescript-type: Omit<Patient, 'id'>
-    UserCredentialsWithRelations:
-      title: UserCredentialsWithRelations
-      type: object
-      description: >-
-        (tsType: UserCredentialsWithRelations, schemaOptions: {
-        includeRelations: true })
-      properties:
-        id:
-          type: string
-        password:
-          type: string
-        userId:
-          type: string
-      required:
-        - password
-        - userId
-      additionalProperties: true
-      x-typescript-type: UserCredentialsWithRelations
     ScanWithRelations:
       title: ScanWithRelations
       type: object
@@ -871,39 +1018,6 @@ components:
         - uploadDate
       additionalProperties: false
       x-typescript-type: ScanWithRelations
-    UserWithRelations:
-      title: UserWithRelations
-      type: object
-      description: '(tsType: UserWithRelations, schemaOptions: { includeRelations: true })'
-      properties:
-        id:
-          type: string
-        realm:
-          type: string
-        username:
-          type: string
-        email:
-          type: string
-        emailVerified:
-          type: boolean
-        verificationToken:
-          type: string
-        role:
-          type: string
-        userCredentials:
-          $ref: '#/components/schemas/UserCredentialsWithRelations'
-        updatedHistories:
-          type: array
-          items:
-            $ref: '#/components/schemas/PatientHistoryWithRelations'
-        uploadedDocuments:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScanWithRelations'
-      required:
-        - email
-      additionalProperties: true
-      x-typescript-type: UserWithRelations
     PatientHistoryWithRelations:
       title: PatientHistoryWithRelations
       type: object

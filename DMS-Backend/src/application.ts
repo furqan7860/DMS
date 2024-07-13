@@ -62,8 +62,6 @@ export class TodoListApplication extends BootMixin(
     this.component(JWTAuthenticationComponent);
     // Bind datasource
     this.dataSource(DbDataSource, UserServiceBindings.DATASOURCE_NAME);
-    this.repository(UserRepository)
-    this.repository(UserCredentialsRepository)
     this.repository(PatientRepository)
     this.repository(PatientHistoryRepository)
     this.repository(ScanRepository)

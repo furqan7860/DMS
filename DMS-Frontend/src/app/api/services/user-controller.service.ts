@@ -70,8 +70,10 @@ export class UserControllerService extends BaseService {
    * This method sends `application/json` and handles request body of type `application/json`.
    */
   login(params: Login$Params, context?: HttpContext): Observable<{
-'token'?: string;
-}> {
+    'token'?: string;
+  }> {
+  console.log('params: ', params);
+  
     return this.login$Response(params, context).pipe(
       map((r: StrictHttpResponse<{
 'token'?: string;

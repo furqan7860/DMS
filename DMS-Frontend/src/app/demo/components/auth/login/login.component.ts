@@ -2,22 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { FormBuilder,FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserControllerService } from 'src/app/api/services';
+import { catchError, tap } from 'rxjs';
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-
     emailPattern: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    constructor(public layoutService: LayoutService, private fb: FormBuilder, private router: Router) { }
-    signUpData: any;
+    constructor(public layoutService: LayoutService, private fb: FormBuilder, private router: Router, private userControllerService: UserControllerService) { }
+
     public userForm: FormGroup;
     ngOnInit(): void {
-
-        this.signUpData = localStorage.getItem('signUpData');
-        this.signUpData = JSON.parse(this.signUpData);
         this.initializeUserForm();
     }
 
@@ -30,23 +27,18 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-
+        console.log(this.userForm.invalid)
         if (this.userForm.invalid) return;
-        const isChecked = this.signUpData?.find((value: any) => {
-            return value.email == this.userForm.get('email').value && value.password == this.userForm.get('password').value
-        });
-
-        if (isChecked) {
-
-            localStorage.setItem("isAuthenticated", JSON.stringify(true));
-            this.router.navigate(["/"]);
-        }
-        else {
-
-            localStorage.setItem("isAuthenticated", JSON.stringify(false));
+        this.userControllerService.login({body: this.userForm.value}).pipe(tap((data) => {
+            if (data.token && data['role']) {
+                localStorage.setItem("user", JSON.stringify(data));
+                this.router.navigate(["/"]);
+            }
+        }), catchError((err:any) => {
             alert('Invalid Credentials');
-        }
-
+            localStorage.clear();
+            throw err;
+        })).subscribe();
     }
 
 }

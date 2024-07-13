@@ -9,21 +9,26 @@ import {
   MyUserService,
   TokenServiceBindings,
   User,
-  UserRepository,
   UserServiceBindings,
 } from '@loopback/authentication-jwt';
 import { inject } from '@loopback/core';
 import { model, property, repository } from '@loopback/repository';
 import {
+  del,
   get,
   getModelSchemaRef,
+  HttpErrors,
+  param,
+  patch,
   post,
+  put,
   requestBody,
   SchemaObject,
 } from '@loopback/rest';
 import { SecurityBindings, securityId, UserProfile } from '@loopback/security';
-import { genSalt, hash } from 'bcryptjs';
+import { compare, genSalt, hash } from 'bcryptjs';
 import _ from 'lodash';
+import { UserRepository } from '../repositories';
 
 @model()
 export class NewUserRequest extends User {
@@ -57,6 +62,7 @@ export const CredentialsRequestBody = {
   },
 };
 
+@authenticate('jwt')
 export class UserController {
   constructor(
     @inject(TokenServiceBindings.TOKEN_SERVICE)
@@ -68,6 +74,7 @@ export class UserController {
     @repository(UserRepository) protected userRepository: UserRepository,
   ) { }
 
+  @authenticate.skip()
   @post('/users/login', {
     responses: {
       '200': {
@@ -89,18 +96,29 @@ export class UserController {
   })
   async login(
     @requestBody(CredentialsRequestBody) credentials: Credentials,
-  ): Promise<{ token: string }> {
-    // ensure the user exists, and the password is correct
-    const user = await this.userService.verifyCredentials(credentials);
-    // convert a User object into a UserProfile object (reduced set of properties)
+  ): Promise<{ token: string, role: string }> {
+    const user: User | null = await this.userRepository.findOne({
+      where: {
+        email: credentials.email
+      }
+    });
+    if (!user) {
+      throw HttpErrors.NotFound('User not found')
+    }
     const userProfile = this.userService.convertToUserProfile(user);
-
+    const passwordMatched = compare(
+      credentials.password,
+      user.password
+    );
+    if (!passwordMatched) {
+      throw new Error('Invalid password');
+    }
+    delete user.password;
     // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
-    return { token };
+    return { token, role: user.role };
   }
 
-  @authenticate('jwt')
   @get('/whoAmI', {
     responses: {
       '200': {
@@ -122,6 +140,7 @@ export class UserController {
     return await this.userService.findUserById(currentUserProfile[securityId]);
   }
 
+  @authenticate.skip()
   @post('/signup', {
     responses: {
       '200': {
@@ -149,12 +168,93 @@ export class UserController {
     newUserRequest: NewUserRequest,
   ): Promise<User> {
     const password = await hash(newUserRequest.password, await genSalt());
-    const savedUser = await this.userRepository.create(
-      _.omit(newUserRequest, 'password'),
-    );
-
-    await this.userRepository.userCredentials(savedUser.id).create({ password });
-
+    newUserRequest.password = password;
+    const savedUser = await this.userRepository.create(newUserRequest);
     return savedUser;
+  }
+
+  @patch('/users/{id}', {
+    responses: {
+      '204': {
+        description: 'User PATCH success',
+      },
+    },
+  })
+  async updateUserById(
+    @param.path.string('id') id: string,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(User, { partial: true }),
+        },
+      },
+    })
+    user: Partial<User>,
+  ): Promise<void> {
+    await this.userRepository.updateById(id, user);
+  }
+
+  @put('/users/{id}', {
+    responses: {
+      '204': {
+        description: 'User PUT success',
+      },
+    },
+  })
+  async replaceUserById(
+    @param.path.string('id') id: string,
+    @requestBody() user: User,
+  ): Promise<void> {
+    await this.userRepository.replaceById(id, user);
+  }
+
+  @get('/users/{id}', {
+    responses: {
+      '200': {
+        description: 'User model instance',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(User, { includeRelations: true }),
+          },
+        },
+      },
+    },
+  })
+  async findUserById(
+    @param.path.string('id') id: string,
+  ): Promise<User> {
+    return this.userRepository.findById(id);
+  }
+
+  @get('/users', {
+    responses: {
+      '200': {
+        description: 'Array of User model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(User, { includeRelations: true }),
+            },
+          },
+        },
+      },
+    },
+  })
+  async findAllUsers(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
+  @del('/users/{id}', {
+    responses: {
+      '204': {
+        description: 'User DELETE success',
+      },
+    },
+  })
+  async deleteUserById(
+    @param.path.string('id') id: string,
+  ): Promise<void> {
+    await this.userRepository.deleteById(id);
   }
 }

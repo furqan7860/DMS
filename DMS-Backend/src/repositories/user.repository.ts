@@ -8,6 +8,7 @@ import { inject, Getter } from '@loopback/core';
 import { DbDataSource } from '../datasources';
 import { PatientHistoryRepository } from './patient-history.repository';
 import { ScanRepository } from './scans.repository'; // Correct import
+import { UserCredentialsRepository } from '@loopback/authentication-jwt';
 
 export class UserRepository extends DefaultCrudRepository<
   User,

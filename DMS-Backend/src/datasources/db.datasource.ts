@@ -10,11 +10,11 @@ const config = {
   name: 'mysql',
   connector: 'mysql',
   url: '',
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '', // Replace with your MySQL password
-  database: 'pms', // Replace with your MySQL database name
+  host: process.env.DB_HOST,
+  port: 21976,
+  user: process.env.DB_USER,
+  password: process.env.DB_PSW, // Replace with your MySQL password
+  database: 'defaultdb', // Replace with your MySQL database name
   strict: true
 };
 // Observe application's life cycle to disconnect the datasource when

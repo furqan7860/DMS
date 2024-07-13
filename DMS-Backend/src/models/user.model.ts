@@ -10,6 +10,11 @@ export class User extends BaseUser {
   })
   role?: string;
 
+  @property({
+    type: 'string',
+  })
+  password?: string;
+
   @hasMany(() => PatientHistory)
   updatedHistories: PatientHistory[];
 
