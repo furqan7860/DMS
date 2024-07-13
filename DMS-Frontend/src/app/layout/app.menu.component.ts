@@ -26,12 +26,19 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Cases', icon: 'pi pi-fw pi-briefcase', routerLink: ['/case/list'] }
                 ]
+            },
+            {
+                label: 'Doctor Management',
+                roles: ['admin', 'doctor'],
+                items: [
+                    { label: 'Doctors', icon: 'pi pi-fw pi-briefcase', routerLink: ['/doctor/list'] }
+                ]
             }
         ];
 
         const role = JSON.parse(localStorage.getItem('user'))?.role;
         if(role) {
-            this.model = this.model.filter((item) => item.roles.includes(role));
+            this.model = this.model.filter((item) => item.roles?.includes(role));
         }
     }
 }

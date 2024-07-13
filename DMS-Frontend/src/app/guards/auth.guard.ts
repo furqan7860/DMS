@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
         if (data && data.token) {
             return true;
         }
-        alert('Kindly Login Again');
+        
         this.router.navigate(['/auth/login']);
         return false;
     }
