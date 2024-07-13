@@ -1,6 +1,7 @@
 import { Entity, model, property, belongsTo } from '@loopback/repository';
 import { Patient } from './patient.model';
 import { User } from './user.model';
+import { Case } from './case.model';
 
 @model()
 export class Scan extends Entity {
@@ -35,6 +36,9 @@ export class Scan extends Entity {
   @belongsTo(() => User)
   userId: string;
 
+  @belongsTo(() => Case)
+  caseId: string;
+
   constructor(data?: Partial<Scan>) {
     super(data);
   }
@@ -43,7 +47,8 @@ export class Scan extends Entity {
 
 export interface ScanRelations {
   patient: Patient;
-  uploadedBy: User;
+  userId: User;
+  caseId: Case;
 }
 
 export type ScanWithRelations = Scan & ScanRelations;

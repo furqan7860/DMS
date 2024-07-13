@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CaseInfo, CaseType } from 'src/app/models/case.model';
-import { PatientService } from 'src/app/demo/service/patient.service';
+import { Case, Patient, Scan } from 'src/app/api/models';
+import { CaseControllerService, PatientControllerControllerService } from 'src/app/api/services';
+import { FileUpload, ImageUploadService } from 'src/app/demo/service/file-upload.service';
 
 @Component({
   selector: 'app-case-management',
@@ -14,19 +14,27 @@ export class CaseManagementComponent {
     { label: 'Case Info' },
     { label: 'Case Review' }
   ];
-  caseInfo: CaseInfo = new CaseInfo();
+  case: Case = {};
+  patient: Patient = {name:'', age:null};
+  scan: Scan = {
+    uploadDate: '',
+    userId: null,
+    url: '',
+    scanType: ''
+  };
 
-  caseTypes: CaseType[] = [
+  caseTypes: any[] = [
     { name: 'Surgical Guide', code: 'surgicalguide' },
     { name: 'Crowns', code: 'crowns' },
     { name: 'Implant Crowns', code: 'implantcrowns' }
   ];
 
   activeIndex: number = 0;
-  selectedCaseType: CaseType = null;
+  selectedCaseType = null;
 
-  constructor(private http: HttpClient,private patientService: PatientService) {
-    this.caseInfo = new CaseInfo();
+  uploadedFiles: any = [];
+
+  constructor(private imageUploadService: ImageUploadService,private patientService: PatientControllerControllerService, private caseSevice: CaseControllerService) {
   }
 
   isCaseTypeValid(): boolean {
@@ -34,15 +42,31 @@ export class CaseManagementComponent {
   }
 
   toggleFastDelivery() {
-    this.caseInfo.isFastDelivery = !this.caseInfo.isFastDelivery;
+    this.case.urgent = !this.case.urgent;
   }
 
   onFileSelect(event: any) {
-    const files = event.files;
-    this.caseInfo.scans = [];
+    for(let file of event.files) {
+      this.uploadedFiles.push(file)
+    }
+    console.log('this.uploadedFiles: ', this.uploadedFiles);
+  }
 
-    this.caseInfo.scans.push(files);
-    console.log(this.caseInfo.scans, "this.caseInfo.scans")
+  onRemove(event:any) {
+    this.uploadedFiles = this.uploadedFiles.filter(file => file.name != event.file.name)
+  }
+
+  uploadScans() {
+      // const file = new FileUpload(event.target.files[0]);
+      // if (file.file) {
+      //   this.imageUploadService.uploadFile(file).then(
+      //     (url) => {
+      //       console.log('url: ', url);
+      //     },
+      //     (error) => {
+      //     }
+      //   );
+      // }
   }
 
   prev() {
@@ -50,6 +74,10 @@ export class CaseManagementComponent {
   }
 
   next() {
+    if (this.activeIndex == 1) {
+      this.uploadedFiles = this.uploadedFiles.filter(file => file.size > 2000)
+    }
+
     if (this.activeIndex < 2) {
       this.activeIndex++;
     } else {
@@ -58,16 +86,15 @@ export class CaseManagementComponent {
   }
 
   submit() {
-    console.log(this.caseInfo);
-    const payload ={
-      name: this.caseInfo.name,
-      age: this.caseInfo.age,
-      gender: this.caseInfo.gender,
-      notes: this.caseInfo.caseNotes,
-      deleted: false
-    }
-    this.patientService.addPatient(payload).subscribe(response => {
-      console.log('Patient created', response);
-    });
+    console.log(this.case);
+    console.log(this.patient)
+    console.log(this.scan)
+
+    this.patientService.create({body: this.patient}).subscribe(patient => {
+      this.caseSevice.create({body: this.case}).subscribe((acase) => {
+        console.log('acase: ', acase);
+        console.log('patient: ', patient);
+      })
+    })
   }
 }

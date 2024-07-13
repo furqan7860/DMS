@@ -1,9 +1,10 @@
 import { DefaultCrudRepository, BelongsToAccessor, repository } from '@loopback/repository';
-import { Scan, ScanRelations, Patient, User } from '../models';
+import { Scan, ScanRelations, Patient, User, Case } from '../models';
 import { DbDataSource } from '../datasources';
 import { inject, Getter } from '@loopback/core';
 import { PatientRepository } from './patient.repository';
 import { UserRepository } from './user.repository';
+import { CaseRepository } from './case.repository';
 
 export class ScanRepository extends DefaultCrudRepository<
   Scan,
@@ -12,6 +13,7 @@ export class ScanRepository extends DefaultCrudRepository<
 > {
   public readonly patient: BelongsToAccessor<Patient, typeof Scan.prototype.id>;
   public readonly user: BelongsToAccessor<User, typeof Scan.prototype.id>;
+  public readonly case: BelongsToAccessor<Case, typeof Scan.prototype.id>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
@@ -19,6 +21,8 @@ export class ScanRepository extends DefaultCrudRepository<
     protected patientRepositoryGetter: Getter<PatientRepository>,
     @repository.getter('UserRepository')
     protected userRepositoryGetter: Getter<UserRepository>,
+    @repository.getter('CaseRepository')
+    protected caseRepositoryGetter: Getter<CaseRepository>,
   ) {
     super(Scan, dataSource);
 
@@ -27,5 +31,8 @@ export class ScanRepository extends DefaultCrudRepository<
 
     this.user = this.createBelongsToAccessorFor('user', userRepositoryGetter);
     this.registerInclusionResolver('user', this.user.inclusionResolver);
+
+    this.case = this.createBelongsToAccessorFor('case', caseRepositoryGetter);
+    this.registerInclusionResolver('case', this.case.inclusionResolver);
   }
 }

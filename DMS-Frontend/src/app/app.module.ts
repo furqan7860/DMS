@@ -13,7 +13,7 @@ import { PhotoService } from './demo/service/photo.service';
 import { AngularFireModule } from '@angular/fire/compat';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorService } from './interceptor/http-interceptor';
-import { PatientService } from './demo/service/patient.service';
+import { CasesService } from './demo/service/cases.service';
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
     imports: [AppRoutingModule, AppLayoutModule, AngularFireModule.initializeApp({
@@ -26,7 +26,7 @@ import { PatientService } from './demo/service/patient.service';
     })],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
-        CountryService, PatientService, EventService, IconService, NodeService,
+        CountryService, CasesService, EventService, IconService, NodeService,
         PhotoService, ProductService, {
             provide: HTTP_INTERCEPTORS,
             useClass: HttpInterceptorService,

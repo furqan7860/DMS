@@ -26,6 +26,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea'
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
     imports: [
         CommonModule,
@@ -50,6 +52,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
         InputSwitchModule,
         CalendarModule,
 		ToastModule,
+        ConfirmDialogModule,
         CheckboxModule,
         InputTextareaModule,
         RouterModule.forChild([
@@ -61,6 +64,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
     declarations: [
         CaseManagementComponent,
         CaseListComponent
+    ],
+    providers: [
+        ConfirmationService
     ],
     exports: [
         RouterModule
