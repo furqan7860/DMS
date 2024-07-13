@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CaseInfo, CaseType } from 'src/app/models/case.model';
-import { PatientService } from 'src/app/demo/service/patient.service';
+import { CasesService } from 'src/app/demo/service/cases.service';
 
 @Component({
   selector: 'app-case-management',
@@ -25,7 +25,7 @@ export class CaseManagementComponent {
   activeIndex: number = 0;
   selectedCaseType: CaseType = null;
 
-  constructor(private http: HttpClient,private patientService: PatientService) {
+  constructor(private http: HttpClient,private caseService: CasesService) {
     this.caseInfo = new CaseInfo();
   }
 
@@ -61,12 +61,10 @@ export class CaseManagementComponent {
     console.log(this.caseInfo);
     const payload ={
       name: this.caseInfo.name,
-      age: this.caseInfo.age,
-      gender: this.caseInfo.gender,
       notes: this.caseInfo.caseNotes,
       deleted: false
     }
-    this.patientService.addPatient(payload).subscribe(response => {
+    this.caseService.createCase(payload).subscribe(response => {
       console.log('Patient created', response);
     });
   }

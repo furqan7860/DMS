@@ -2,7 +2,7 @@
 	<div class="col-12">
 	  <div class="card">
 		<h5>Cases</h5>
-		<p-table #dt1 [value]="patients" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['name','age','gender','notes']" responsiveLayout="scroll">
+		<p-table #dt1 [value]="cases" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['case_type','patient','user','notes']" responsiveLayout="scroll">
 		  <ng-template pTemplate="caption">
 			<div class="flex justify-content-between flex-column sm:flex-row">
 			  <span class="p-input-icon-left mb-2">
@@ -16,73 +16,93 @@
 			<tr>
 			  <th style="min-width: 12rem">
 				<div class="flex justify-content-between align-items-center">
-				  Patient ID
+				  Case ID
 				</div>
 			  </th>
 			  <th style="min-width: 12rem">
 				<div class="flex justify-content-between align-items-center">
-				  Name
-				  <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+				  Case Type
+				  <p-columnFilter type="text" field="case_type" display="menu" placeholder="Search by case type"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 10rem">
+			  <th style="min-width: 12rem">
 				<div class="flex justify-content-between align-items-center">
-				  Age
-				  <p-columnFilter type="numeric" field="age" display="menu"></p-columnFilter>
+				  Patient
+				  <p-columnFilter type="text" field="patient" display="menu" placeholder="Search by patient"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 10rem">
+			  <th style="min-width: 12rem">
 				<div class="flex justify-content-between align-items-center">
-				  Gender
-				  <p-columnFilter type="text" field="gender" display="menu" placeholder="Search by gender"></p-columnFilter>
+				  User
+				  <p-columnFilter type="text" field="user" display="menu" placeholder="Search by user"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 14rem">
+			  <th style="min-width: 12rem">
+				<div class="flex justify-content-between align-items-center">
+				  Delivery Date
+				  <p-columnFilter type="date" field="delivery_date" display="menu" placeholder="mm/dd/yyyy"></p-columnFilter>
+				</div>
+			  </th>
+			  <th style="min-width: 12rem">
+				<div class="flex justify-content-between align-items-center">
+				  Urgent
+				  <p-columnFilter type="boolean" field="urgent" display="menu"></p-columnFilter>
+				</div>
+			  </th>
+			  <th style="min-width: 12rem">
 				<div class="flex justify-content-between align-items-center">
 				  Notes
 				  <p-columnFilter type="text" field="notes" display="menu" placeholder="Search by notes"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 10rem">
+			  <th style="min-width: 12rem">
 				<div class="flex justify-content-between align-items-center">
 				  Actions
 				</div>
 			  </th>
 			</tr>
 		  </ng-template>
-		  <ng-template pTemplate="body" let-patient>
+		  <ng-template pTemplate="body" let-case>
 			<tr>
 			  <td>
-				{{patient.id}}
+				{{case.id}}
 			  </td>
 			  <td>
-				{{patient.name}}
+				{{case.case_type}}
 			  </td>
 			  <td>
-				{{patient.age}}
+				{{case.patient}}
 			  </td>
 			  <td>
-				{{patient.gender}}
+				{{case.user}}
 			  </td>
 			  <td>
-				{{patient.notes}}
+				{{case.delivery_date | date: 'MM/dd/yyyy'}}
 			  </td>
 			  <td>
-				<button pButton type="button" icon="pi pi-eye" class="p-button-rounded p-button-info"></button>
+				<span [class]="case.urgent ? 'text-red-500' : 'text-green-500'">{{case.urgent ? 'Yes' : 'No'}}</span>
+			  </td>
+			  <td>
+				{{case.notes}}
+			  </td>
+			  <td>
+				<button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success"></button>
+				<button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDeleteCase(case.id)"></button>
 			  </td>
 			</tr>
 		  </ng-template>
 		  <ng-template pTemplate="emptymessage">
 			<tr>
-			  <td colspan="6">No patients found.</td>
+			  <td colspan="8">No cases found.</td>
 			</tr>
 		  </ng-template>
 		  <ng-template pTemplate="loadingbody">
 			<tr>
-			  <td colspan="6">Loading patients data. Please wait.</td>
+			  <td colspan="8">Loading cases data. Please wait.</td>
 			</tr>
 		  </ng-template>
 		</p-table>
+		<p-confirmDialog></p-confirmDialog>
 	  </div>
 	</div>
   </div>
