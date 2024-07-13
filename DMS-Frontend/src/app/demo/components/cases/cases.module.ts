@@ -19,7 +19,13 @@ import { RippleModule } from 'primeng/ripple';
 import { SliderModule } from 'primeng/slider';
 import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-
+import { StepsModule } from 'primeng/steps';
+import { CardModule } from 'primeng/card';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
+import { FileUploadModule } from 'primeng/fileupload';
+import { InputTextareaModule } from 'primeng/inputtextarea'
 @NgModule({
     imports: [
         CommonModule,
@@ -37,8 +43,15 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 		RippleModule,
 		MultiSelectModule,
 		DropdownModule,
+        FileUploadModule,
+        StepsModule,
+        CardModule,
 		ProgressBarModule,
+        InputSwitchModule,
+        CalendarModule,
 		ToastModule,
+        CheckboxModule,
+        InputTextareaModule,
         RouterModule.forChild([
             { path: 'list', component: CaseListComponent },
             { path: 'add', component: CaseManagementComponent },
