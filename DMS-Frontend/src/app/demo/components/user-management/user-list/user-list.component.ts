@@ -2,10 +2,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { UserControllerService } from 'src/app/api/services/user-controller.service';
-import { Customer, Representative } from 'src/app/demo/api/customer';
-import { Product } from 'src/app/demo/api/product';
 import { CustomerService } from 'src/app/demo/service/customer.service';
-import { ProductService } from 'src/app/demo/service/product.service';
+import { FormBuilder,FormGroup, Validators } from '@angular/forms';
+
 interface expandedRows {
   [key: string]: boolean;
 }
@@ -17,124 +16,43 @@ interface expandedRows {
 })
 export class UserListComponent {
 
+visible: boolean = false;
+public doctorForm: FormGroup;
+
   doctorList:any=[];
-  customers1: Customer[] = [];
-
-  customers2: Customer[] = [];
-
-  customers3: Customer[] = [];
-
-  selectedCustomers1: Customer[] = [];
-
-  selectedCustomer: Customer = {};
-
-  representatives: Representative[] = [];
-
-  statuses: any[] = [];
-
-  products: Product[] = [];
-
-  rowGroupMetadata: any;
-
-  expandedRows: expandedRows = {};
-
-  activityValues: number[] = [0, 100];
-
-  isExpanded: boolean = false;
-
-  idFrozen: boolean = false;
-
-  loading: boolean = true;
 
   @ViewChild('filter') filter!: ElementRef;
+  emailPattern: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 
-  constructor(private customerService: CustomerService, private productService: ProductService,private userControllerService: UserControllerService ) { }
+  constructor(private userControllerService: UserControllerService, private fb: FormBuilder ) { }
 
   ngOnInit() {
 
+    this.initializeDoctorForm();
+
    this.userControllerService.findAllUsers().subscribe({
       next:(res)=>{
-        this.doctorList=res;
+        this.doctorList=res.filter(doc=>doc.role!='admin');
         console.log(' this.doctorList: ',  this.doctorList);
       }
     });
-
-      this.customerService.getCustomersLarge().then(customers => {
-          this.customers1 = customers;
-          this.loading = false;
-
-          // @ts-ignore
-          this.customers1.forEach(customer => customer.date = new Date(customer.date));
-      });
-      this.customerService.getCustomersMedium().then(customers => this.customers2 = customers);
-      this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
-      this.productService.getProductsWithOrdersSmall().then(data => this.products = data);
-
-      this.representatives = [
-          { name: 'Amy Elsner', image: 'amyelsner.png' },
-          { name: 'Anna Fali', image: 'annafali.png' },
-          { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-          { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-          { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-          { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-          { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-          { name: 'Onyama Limba', image: 'onyamalimba.png' },
-          { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-          { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-      ];
-
-      this.statuses = [
-          { label: 'Unqualified', value: 'unqualified' },
-          { label: 'Qualified', value: 'qualified' },
-          { label: 'New', value: 'new' },
-          { label: 'Negotiation', value: 'negotiation' },
-          { label: 'Renewal', value: 'renewal' },
-          { label: 'Proposal', value: 'proposal' }
-      ];
+  
   }
 
-  onSort() {
-      this.updateRowGroupMetaData();
-  }
+  initializeDoctorForm(): void {
+    this.doctorForm = this.fb.group({
+        username: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email, Validators.pattern(this.emailPattern)]],
+        password: ['', Validators.required],
+        role: ['Doctor', Validators.required],
+        active: [false, Validators.required],
+    });
+}
 
-  updateRowGroupMetaData() {
-      this.rowGroupMetadata = {};
-
-      if (this.customers3) {
-          for (let i = 0; i < this.customers3.length; i++) {
-              const rowData = this.customers3[i];
-              const representativeName = rowData?.representative?.name || '';
-
-              if (i === 0) {
-                  this.rowGroupMetadata[representativeName] = { index: 0, size: 1 };
-              }
-              else {
-                  const previousRowData = this.customers3[i - 1];
-                  const previousRowGroup = previousRowData?.representative?.name;
-                  if (representativeName === previousRowGroup) {
-                      this.rowGroupMetadata[representativeName].size++;
-                  }
-                  else {
-                      this.rowGroupMetadata[representativeName] = { index: i, size: 1 };
-                  }
-              }
-          }
-      }
-  }
-
-  expandAll() {
-      if (!this.isExpanded) {
-          this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
-
-      } else {
-          this.expandedRows = {};
-      }
-      this.isExpanded = !this.isExpanded;
-  }
-
-  formatCurrency(value: number) {
-      return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  }
+  showDialog() {
+    this.visible = true;
+    this.initializeDoctorForm();
+}
 
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
@@ -143,5 +61,26 @@ export class UserListComponent {
   clear(table: Table) {
       table.clear();
       this.filter.nativeElement.value = '';
+  }
+
+  onSubmit(){
+    this.userControllerService.signUp({body: this.doctorForm.value}).subscribe({
+        next:(res)=>{
+            if(res){
+                console.log('res: ', res);                
+            }
+        },
+        error:(err)=>{
+            alert('Call Failed');
+        }
+    })
+    
+    console.log("Form Values",this.doctorForm.value)
+    this.doctorForm.reset()
+  }
+
+  activeCheck(event){
+    this.doctorForm.get('active').patchValue(event.checked ? true : false);
+
   }
 }

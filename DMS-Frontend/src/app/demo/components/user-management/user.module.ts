@@ -26,6 +26,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea'
+import { DialogModule } from 'primeng/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
     imports: [
         CommonModule,
@@ -56,7 +58,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
             { path: 'list', component: UserListComponent },
             { path: 'add', component: AddUserComponent },
             { path: 'edit/:id', component: AddUserComponent },
-        ] as Routes)
+        ] as Routes),
+        DialogModule,
+        ReactiveFormsModule
     ],
     declarations: [
         AddUserComponent,
