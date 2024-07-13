@@ -54,7 +54,7 @@ export class UserListComponent {
 
    this.userControllerService.findAllUsers().subscribe({
       next:(res)=>{
-        this.doctorList=res;
+        this.doctorList=res.filter(doc => doc.role != 'admin');
         console.log(' this.doctorList: ',  this.doctorList);
       }
     });

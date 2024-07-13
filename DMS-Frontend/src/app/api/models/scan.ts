@@ -3,6 +3,7 @@
 export interface Scan {
   id?: number;
   patientId?: string;
+  caseId?: string;
   scanType: string;
   uploadDate: string;
   url: string;

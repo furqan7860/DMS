@@ -1,92 +1,89 @@
 <div class="p-grid p-align-center p-justify-center">
-    <div class="p-col-12 p-md-6">
-      <p-steps [model]="items" [(activeIndex)]="activeIndex"></p-steps>
-  
-      <p-card *ngIf="activeIndex === 0" class="form-step">
-        <ng-template pTemplate="header">
-        </ng-template>
-        <ng-template pTemplate="content">
-          <form #caseForm="ngForm">
-            <h5 class="mb-0">Case Type</h5>
-            <p class="subheader">Choose case type</p>
-  
-            <div class="p-field">
-              <label for="caseType">Case Type<span class="required-asterisk">*</span></label>
-              <p-dropdown id="caseType" [options]="caseTypes" [(ngModel)]="selectedCaseType" name="selectedCaseType"
-                optionLabel="name" placeholder="Select" [autoWidth]="false" required [style.width]="'100%'">
-              </p-dropdown>
-              <div *ngIf="caseForm.submitted && !isCaseTypeValid()" class="p-error">
-                Case Type is required.
+  <div class="p-col-12 p-md-6">
+    <p-steps [model]="items" [(activeIndex)]="activeIndex"></p-steps>
+
+    <p-card *ngIf="activeIndex === 0" class="form-step">
+      <ng-template pTemplate="header">
+      </ng-template>
+      <ng-template pTemplate="content">
+        <form #caseForm="ngForm">
+          <h5 class="mb-0">Case Type</h5>
+          <p class="subheader mb-4">Choose case type</p>
+          <div class="flex flex-column gap-2">
+            <label for="caseType" class="pb-2">Case Type<span class="required-asterisk">*</span></label>
+            <p-dropdown id="caseType" [options]="caseTypes" [(ngModel)]="case.case_type" name="selectedCaseType"
+              optionLabel="name" optionValue="name" placeholder="Select" [autoWidth]="false" required [style.width]="'100%'">
+            </p-dropdown>
+          </div>
+        </form>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <div class="navigation-buttons">
+          <p-button label="Previous" icon="pi pi-arrow-left" (onClick)="prev()"
+            [disabled]="activeIndex === 0"></p-button>
+          <p-button label="Next" icon="pi pi-arrow-right" (onClick)="next()"
+            [disabled]="!case.case_type && activeIndex === 0"></p-button>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <p-card *ngIf="activeIndex === 1" class="form-step">
+      <ng-template pTemplate="content">
+        <form #caseForm="ngForm">
+          <h5 class="mb-0">Case Info</h5>
+          <p class="subheader  mb-4">Add case info</p>
+          <div class="p-grid">
+            <div class="flex gap-2">
+              <div class="col-6 px-0">
+                <div class="flex flex-column gap-2">
+                  <label for="name">Patient Name<span class="required-asterisk">*</span></label>
+                  <input pInputText [(ngModel)]="patient.name" #patientName="ngModel" name="patientName"
+                    placeholder="Enter Patient Name" required>
+                  <div *ngIf="(patientName.touched || patientName.dirty) && patientName.invalid" class="p-error">Patient
+                    name is required.</div>
+                </div>
+              </div>
+
+
+              <div class="col-6 px-0">
+                <div class="flex flex-column gap-2">
+                  <label for="age">Age<span class="required-asterisk">*</span></label>
+                  <input pInputText type="number" [(ngModel)]="patient.age" #age="ngModel" name="age"
+                    placeholder="Enter Age" required>
+                  <div *ngIf="(age.touched || age.dirty) && age.invalid" class="p-error">Age is required.</div>
+                </div>
               </div>
             </div>
-          </form>
-        </ng-template>
-        <ng-template pTemplate="footer">
-          <div class="navigation-buttons">
-            <p-button label="Previous" icon="pi pi-arrow-left" (onClick)="prev()"
-              [disabled]="activeIndex === 0"></p-button>
-            <p-button label="Next" icon="pi pi-arrow-right" (onClick)="next()"
-              [disabled]="!isCaseTypeValid() && activeIndex === 0"></p-button>
-          </div>
-        </ng-template>
-      </p-card>
-  
-      <p-card *ngIf="activeIndex === 1" class="form-step">
-        <ng-template pTemplate="header">
-          <h5 class="mb-0">Case Info</h5>
-          <p class="subheader">Add case info</p>
-        </ng-template>
-        <ng-template pTemplate="content">
-          <form #caseForm="ngForm">
-            <div class="p-grid">
-              <div class="p-field">
-                <label for="name">Patient Name<span class="required-asterisk">*</span></label>
-                <input pInputText [(ngModel)]="caseInfo.name" name="patientName" placeholder="Enter Patient Name"
-                  required>
-                <div *ngIf="caseForm.submitted && !caseInfo.name" class="p-error">Patient name is required.</div>
-              </div>
-  
-              <div class="p-field">
-                <label for="age">Age<span class="required-asterisk">*</span></label>
-                <input pInputText type="number" [(ngModel)]="caseInfo.age" name="age" placeholder="Enter Age" required>
-                <div *ngIf="caseForm.submitted && !caseInfo.age" class="p-error">Age is required.</div>
-              </div>
-  
-              <div class="p-field">
+            <div class="flex gap-2">
+            <!-- <div class="col-6 px-0">
+              <div class="flex flex-column gap-2">
                 <label for="gender">Gender<span class="required-asterisk">*</span></label>
-                <input pInputText [(ngModel)]="caseInfo.gender" name="gender" placeholder="Enter Gender" required>
-                <div *ngIf="caseForm.submitted && !caseInfo.gender" class="p-error">Gender is required.</div>
+                <p-dropdown [options]="[{  name: 'Male', value: 'male' }, { name: 'Female', value: 'female' },{ name: 'Other', value: 'other'}]" [(ngModel)]="patient.gender" optionLabel="name" optionValue="value" #gender="ngModel"
+                  placeholder="Select patient gender" />
+                <div *ngIf="(gender.touched || gender.dirty) && gender.invalid" class="p-error">Gender is required.
+                </div>
               </div>
-  
+
+
+            </div> -->
+            <div class="col-6 px-0">
               <div class="notes">
-                <label for="caseNotes">Case Notes/Type of work (e.g., all on x zirconia, design, etc.)<span
-                    class="required-asterisk">*</span></label>
-                <textarea id="caseNotes" [(ngModel)]="caseInfo.caseNotes" name="caseNotes" required></textarea>
-                <div *ngIf="caseForm.submitted && !caseInfo.caseNotes" class="p-error">Case Notes/Type of work is
-                  required.
-                </div>
+                <label for="caseNotes">Patient Notes</label>
+                <textarea pInputTextarea  id="caseNotes" [(ngModel)]="patient.notes" #notes="ngModel" name="notes"></textarea>
               </div>
-  
-              <div class="form-group">
-                <span for="deliveryOption">Need your design within same day?</span>
-                <div>
-                  <p-inputSwitch name="isFastDelivery" (click)="toggleFastDelivery()" />
-                  <i class="pi pi-info-circle"></i> <span>Enabling this feature will result in a doubling $200 rush
-                    fee</span>
-                </div>
-              </div>
-  
-              <div class="custom-uploader">
+            </div>
+
+            <div class="col-6 px-0">
+              <div class="custom-uploader mt-4">
                 <div class="upload-instructions">
-                  <p>Scans<span class="required-asterisk">*</span>:</p>
-                  <ol>
+                  <p>Scans<span class="required-asterisk">*</span>:
                     <span class="required-asterisk"> Please upload intra oral scans, scan body scans, photogrammetry if
                       available, and any face scans or photos below.</span>
-                  </ol>
+                    </p>
                 </div>
   
-                <p-fileUpload id="scans" name="scans" (onSelect)="onFileSelect($event)" mode="advanced" auto="true"
-                  multiple="true" accept=".zip" required>
+                <p-fileUpload [maxFileSize]="2000000" id="scans" name="scans" (onRemove)="onRemove($event)" (onSelect)="onFileSelect($event)" mode="advanced" auto="true"
+                  multiple="true" required>
                   <ng-template pTemplate="content" (onSelect)="onFileSelect($event)">
                     <div class="custom-upload-area">
                       <i class="pi pi-cloud-upload"></i>
@@ -107,77 +104,86 @@
                 </ng-template>
   
               </div>
-              <div class="notes">
-                <label for="doctorNotes">Doctor Notes</label>
-                <textarea id="doctorNotes" pInputTextarea [(ngModel)]="caseInfo.doctorNotes" name="doctorNotes"
-                  placeholder="e.g., Please relab crown, etc."></textarea>
-              </div>
-  
             </div>
-            <div class="navigation-buttons">
-              <p-button label="Previous" icon="pi pi-arrow-left" (onClick)="prev()"></p-button>
-              <p-button label="Next" icon="pi pi-arrow-right" [disabled]="caseForm.invalid" (onClick)="next()"></p-button>
-            </div>
-          </form>
-        </ng-template>
-      </p-card>
-  
-      <p-card *ngIf="activeIndex === 2" class="form-step">
-        <ng-template pTemplate="header">
-          <h3>Case Review</h3>
-        </ng-template>
-        <ng-template pTemplate="content">
-          <div class="confirmation-page">
-            <h2>Almost done! <i class="pi pi-rocket"></i></h2>
-            <p>Confirm your case information and submit it.</p>
-  
-            <div class="p-field">
-              <label for="patientName">Patient Name:</label>
-              <span id="patientName">{{ caseInfo.name }}</span>
-            </div>
-  
-            <!-- New Fields -->
-            <div class="p-field">
-              <label for="age">Age:</label>
-              <span id="age">{{ caseInfo.age }}</span>
-            </div>
-  
-            <div class="p-field">
-              <label for="gender">Gender:</label>
-              <span id="gender">{{ caseInfo.gender }}</span>
-            </div>
-  
-            <div class="p-field" *ngIf="caseInfo.isFastDelivery">
-              <label for="deliveryDate">Delivery Date:</label>
-              <span class="fast-delivery">FAST DELIVERY</span>
-            </div>
-  
-            <div class="p-field">
-              <label for="surgicalType">Surgical Type:</label>
-              <span id="surgicalType">{{ caseInfo.surgicalType }}</span>
-            </div>
-  
-            <div class="p-field">
-              <label for="scans">Scans:</label>
-              <ul>
-                <li *ngFor="let scan of caseInfo.scans">{{ scan?.name }} - {{ scan?.size }} kb</li>
-              </ul>
-            </div>
-  
-            <div class="p-field">
-              <label for="doctorNotes">Doctor Notes:</label>
-              <span id="doctorNotes">{{ caseInfo.doctorNotes }}</span>
-            </div>
+
           </div>
-  
-        </ng-template>
-        <ng-template pTemplate="footer">
+
+           
+            <div class="notes mt-5 col-12 px-0">
+              <label for="doctorNotes mb-2">Case Notes/Type of work (ex. all on x zirconia, design etc)</label>
+              <textarea pInputTextarea rows="10" id="doctorNotes" pInputTextarea [(ngModel)]="case.notes" name="doctorNotes"
+                placeholder="e.g., Please relab crown, etc."></textarea>
+            </div>
+
+          </div>
           <div class="navigation-buttons">
-            <p-button label="Previous" icon="pi pi-arrow-left" class="prev-button" (onClick)="prev()"></p-button>
-            <p-button label="Submit" (onClick)="submit()" icon="pi pi-check" class="submit-button"></p-button>
+            <p-button label="Previous" icon="pi pi-arrow-left" (onClick)="prev()"></p-button>
+            <p-button label="Next" icon="pi pi-arrow-right" [disabled]="caseForm.invalid || !uploadedFiles.length" (onClick)="next()"></p-button>
           </div>
-        </ng-template>
-      </p-card>
-    </div>
+        </form>
+      </ng-template>
+    </p-card>
+
+    <p-card *ngIf="activeIndex === 2" class="form-step">
+      <ng-template pTemplate="content">
+        <div class="confirmation-page">
+          <h3>Case Review</h3>
+          <h2>Almost done! <i class="pi pi-rocket"></i></h2>
+          <p>Confirm your case information and submit it.</p>
+
+          <div class="flex gap-2 mb-3">
+            <label for="patientName">Patient Name:</label>
+            <span id="patientName">{{ patient.name }}</span>
+          </div>
+
+          <!-- New Fields -->
+          <div class="flex gap-2 mb-3">
+            <label for="age">Age:</label>
+            <span id="age">{{ patient.age }}</span>
+          </div>
+
+
+          <div class="flex gap-2 mb-3">
+            <label for="case">Type of case:</label>
+            <span id="case">{{ case.case_type }}</span>
+          </div>
+
+
+
+          <div class="flex gap-2 mb-3" *ngIf="case.urgent">
+            <label for="deliveryDate">Urgent Delivery</label>
+            <span class="fast-delivery">{{case.urgent ? 'Yes': 'No'}}</span>
+          </div>
+
+          <!-- <div class="flex gap-2 mb-3">
+            <label for="surgicalType">Surgical Type:</label>
+            <span id="surgicalType">{{ case.surgicalType }}</span>
+          </div> -->
+
+          <div class="flex flex-column gap-2 mb-3">
+            <label for="scans">Scans:</label>
+            <ul>
+              <li *ngFor="let file of uploadedFiles">{{ file?.name }} - {{ (file?.size / 1024).toFixed(2) }}kb</li>
+            </ul>
+          </div>
+          <div class="flex gap-2 mb-3">
+            <label for="doctorNotes">Patient Notes:</label>
+            <span id="doctorNotes">{{ case.notes }}</span>
+          </div>
+
+          <div class="flex gap-2 mb-3">
+            <label for="doctorNotes">Doctor Notes:</label>
+            <span id="doctorNotes">{{ case.notes }}</span>
+          </div>
+        </div>
+
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <div class="navigation-buttons">
+          <p-button label="Previous" icon="pi pi-arrow-left" class="prev-button" (onClick)="prev()"></p-button>
+          <p-button label="Submit" (onClick)="submit()" icon="pi pi-check" class="submit-button"></p-button>
+        </div>
+      </ng-template>
+    </p-card>
   </div>
-  
+</div>
