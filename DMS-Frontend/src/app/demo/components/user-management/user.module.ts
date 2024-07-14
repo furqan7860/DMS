@@ -28,6 +28,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
     imports: [
         CommonModule,
@@ -60,7 +61,8 @@ import { ReactiveFormsModule } from '@angular/forms';
             { path: 'edit/:id', component: AddUserComponent },
         ] as Routes),
         DialogModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        ConfirmDialogModule
     ],
     declarations: [
         AddUserComponent,
