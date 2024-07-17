@@ -11,9 +11,9 @@ export class ScanRepository extends DefaultCrudRepository<
   typeof Scan.prototype.id,
   ScanRelations
 > {
-  public readonly patient: BelongsToAccessor<Patient, typeof Scan.prototype.id>;
-  public readonly user: BelongsToAccessor<User, typeof Scan.prototype.id>;
-  public readonly case: BelongsToAccessor<Case, typeof Scan.prototype.id>;
+  public readonly patientId: BelongsToAccessor<Patient, typeof Scan.prototype.id>;
+  public readonly userId: BelongsToAccessor<User, typeof Scan.prototype.id>;
+  public readonly caseId: BelongsToAccessor<Case, typeof Scan.prototype.id>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
@@ -26,13 +26,13 @@ export class ScanRepository extends DefaultCrudRepository<
   ) {
     super(Scan, dataSource);
 
-    this.patient = this.createBelongsToAccessorFor('patient', patientRepositoryGetter);
-    this.registerInclusionResolver('patient', this.patient.inclusionResolver);
+    this.patientId = this.createBelongsToAccessorFor('patient', patientRepositoryGetter);
+    this.registerInclusionResolver('patient', this.patientId.inclusionResolver);
 
-    this.user = this.createBelongsToAccessorFor('user', userRepositoryGetter);
-    this.registerInclusionResolver('user', this.user.inclusionResolver);
+    this.userId = this.createBelongsToAccessorFor('user', userRepositoryGetter);
+    this.registerInclusionResolver('user', this.userId.inclusionResolver);
 
-    this.case = this.createBelongsToAccessorFor('case', caseRepositoryGetter);
-    this.registerInclusionResolver('case', this.case.inclusionResolver);
+    this.caseId = this.createBelongsToAccessorFor('case', caseRepositoryGetter);
+    this.registerInclusionResolver('case', this.caseId.inclusionResolver);
   }
 }

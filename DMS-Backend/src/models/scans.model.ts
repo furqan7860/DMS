@@ -31,13 +31,13 @@ export class Scan extends Entity {
   uploadDate: string;
 
   @belongsTo(() => Patient)
-  patientId: string;
+  patientId: number;
 
   @belongsTo(() => User)
   userId: string;
 
   @belongsTo(() => Case)
-  caseId: string;
+  caseId: number;
 
   constructor(data?: Partial<Scan>) {
     super(data);
@@ -46,7 +46,7 @@ export class Scan extends Entity {
 
 
 export interface ScanRelations {
-  patient: Patient;
+  patientId: Patient;
   userId: User;
   caseId: Case;
 }

@@ -38,10 +38,10 @@ export class Case extends Entity {
   deleted?: boolean;
 
   @belongsTo(() => Patient)
-  patient: string;
+  patientId: number;
 
   @belongsTo(() => User)
-  user: string;
+  userId: string;
 
   constructor(data?: Partial<Case>) {
     super(data);
@@ -49,8 +49,8 @@ export class Case extends Entity {
 }
 
 export interface CaseRelations {
-  user: User;
-  patient: Patient;
+  userId: User;
+  patientId: Patient;
 }
 
 export type CaseWithRelations = Case & CaseRelations;

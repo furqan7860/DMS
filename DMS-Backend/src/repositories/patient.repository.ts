@@ -4,6 +4,7 @@ import { DbDataSource } from '../datasources';
 import { inject, Getter } from '@loopback/core';
 import { PatientHistoryRepository } from './patient-history.repository';
 import { ScanRepository } from './scans.repository';
+import { UserRepository } from './user.repository';
 
 export class PatientRepository extends DefaultCrudRepository<
   Patient,
@@ -31,6 +32,8 @@ export class PatientRepository extends DefaultCrudRepository<
     protected patientHistoryRepositoryGetter: Getter<PatientHistoryRepository>,
     @repository.getter('ScanRepository')
     protected scanRepositoryGetter: Getter<ScanRepository>,
+    @repository.getter('UserRepository')
+    protected userRepositoryGetter: Getter<UserRepository>,
   ) {
     super(Patient, dataSource);
 
@@ -45,5 +48,8 @@ export class PatientRepository extends DefaultCrudRepository<
       scanRepositoryGetter,
     );
     this.registerInclusionResolver('scan', this.scan.inclusionResolver);
+
+    this.userId = this.createBelongsToAccessorFor('user', userRepositoryGetter);
+    this.registerInclusionResolver('user', this.userId.inclusionResolver);
   }
 }

@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface Scan {
+  caseId?: number;
   id?: number;
-  patientId?: string;
-  caseId?: string;
+  patientId?: number;
   scanType: string;
   uploadDate: string;
   url: string;

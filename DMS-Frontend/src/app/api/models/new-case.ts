@@ -9,7 +9,7 @@ export interface NewCase {
   deleted?: boolean;
   delivery_date?: string;
   notes?: string;
-  patient?: string;
+  patientId?: number;
   urgent?: boolean;
-  user?: string;
+  userId?: string;
 }

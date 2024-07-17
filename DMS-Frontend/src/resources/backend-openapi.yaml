@@ -1339,9 +1339,11 @@ components:
           type: string
           format: date-time
         patientId:
-          type: string
+          type: number
         userId:
           type: string
+        caseId:
+          type: number
       required:
         - scanType
         - url
@@ -1362,9 +1364,11 @@ components:
           type: string
           format: date-time
         patientId:
-          type: string
+          type: number
         userId:
           type: string
+        caseId:
+          type: number
       required:
         - scanType
         - url
@@ -1438,6 +1442,34 @@ components:
         - age
       additionalProperties: false
       x-typescript-type: PatientWithRelations
+    CaseWithRelations:
+      title: CaseWithRelations
+      type: object
+      description: '(tsType: CaseWithRelations, schemaOptions: { includeRelations: true })'
+      properties:
+        id:
+          type: number
+        case_type:
+          type: string
+        delivery_date:
+          type: string
+        urgent:
+          type: boolean
+        notes:
+          type: string
+        deleted:
+          type: boolean
+        patientId:
+          type: number
+        userId:
+          type: string
+        patient:
+          $ref: '#/components/schemas/PatientWithRelations'
+        foreignKey: {}
+        user:
+          $ref: '#/components/schemas/UserWithRelations'
+      additionalProperties: false
+      x-typescript-type: CaseWithRelations
     ScanWithRelations:
       title: ScanWithRelations
       type: object
@@ -1453,14 +1485,18 @@ components:
           type: string
           format: date-time
         patientId:
-          type: string
+          type: number
         userId:
           type: string
+        caseId:
+          type: number
         patient:
           $ref: '#/components/schemas/PatientWithRelations'
         foreignKey: {}
         user:
           $ref: '#/components/schemas/UserWithRelations'
+        case:
+          $ref: '#/components/schemas/CaseWithRelations'
       required:
         - scanType
         - url
@@ -1482,9 +1518,11 @@ components:
           type: string
           format: date-time
         patientId:
-          type: string
+          type: number
         userId:
           type: string
+        caseId:
+          type: number
       additionalProperties: false
       x-typescript-type: Partial<Scan>
     Patient:
@@ -1634,9 +1672,9 @@ components:
           type: string
         deleted:
           type: boolean
-        patient:
-          type: string
-        user:
+        patientId:
+          type: number
+        userId:
           type: string
       additionalProperties: false
     NewCase:
@@ -1656,36 +1694,12 @@ components:
           type: string
         deleted:
           type: boolean
-        patient:
-          type: string
-        user:
+        patientId:
+          type: number
+        userId:
           type: string
       additionalProperties: false
       x-typescript-type: Omit<Case, 'id'>
-    CaseWithRelations:
-      title: CaseWithRelations
-      type: object
-      description: '(tsType: CaseWithRelations, schemaOptions: { includeRelations: true })'
-      properties:
-        id:
-          type: number
-        case_type:
-          type: string
-        delivery_date:
-          type: string
-        urgent:
-          type: boolean
-        notes:
-          type: string
-        deleted:
-          type: boolean
-        patient:
-          type: string
-        user:
-          type: string
-        foreignKey: {}
-      additionalProperties: false
-      x-typescript-type: CaseWithRelations
     CasePartial:
       title: CasePartial
       type: object
@@ -1703,9 +1717,9 @@ components:
           type: string
         deleted:
           type: boolean
-        patient:
-          type: string
-        user:
+        patientId:
+          type: number
+        userId:
           type: string
       additionalProperties: false
       x-typescript-type: Partial<Case>
@@ -1802,9 +1816,9 @@ components:
                   type: boolean
                 deleted:
                   type: boolean
-                patient:
+                patientId:
                   type: boolean
-                user:
+                userId:
                   type: boolean
               additionalProperties: false
             - type: array
@@ -1817,8 +1831,8 @@ components:
                   - urgent
                   - notes
                   - deleted
-                  - patient
-                  - user
+                  - patientId
+                  - userId
                 example: id
               uniqueItems: true
           title: Case.Fields
@@ -1871,9 +1885,9 @@ components:
                   type: boolean
                 deleted:
                   type: boolean
-                patient:
+                patientId:
                   type: boolean
-                user:
+                userId:
                   type: boolean
               additionalProperties: false
             - type: array
@@ -1886,8 +1900,8 @@ components:
                   - urgent
                   - notes
                   - deleted
-                  - patient
-                  - user
+                  - patientId
+                  - userId
                 example: id
               uniqueItems: true
           title: Case.Fields
@@ -2299,6 +2313,7 @@ components:
           enum:
             - patient
             - user
+            - case
         scope:
           $ref: '#/components/schemas/Scan.ScopeFilter'
     Scan.Filter:
@@ -2337,6 +2352,8 @@ components:
                   type: boolean
                 userId:
                   type: boolean
+                caseId:
+                  type: boolean
               additionalProperties: false
             - type: array
               items:
@@ -2348,6 +2365,7 @@ components:
                   - uploadDate
                   - patientId
                   - userId
+                  - caseId
                 example: id
               uniqueItems: true
           title: Scan.Fields
@@ -2400,6 +2418,8 @@ components:
                   type: boolean
                 userId:
                   type: boolean
+                caseId:
+                  type: boolean
               additionalProperties: false
             - type: array
               items:
@@ -2411,6 +2431,7 @@ components:
                   - uploadDate
                   - patientId
                   - userId
+                  - caseId
                 example: id
               uniqueItems: true
           title: Scan.Fields

@@ -5,7 +5,8 @@
  * (tsType: Omit<Scan, 'id'>, schemaOptions: { title: 'NewScans', exclude: [ 'id' ] })
  */
 export interface NewScans {
-  patientId?: string;
+  caseId?: number;
+  patientId?: number;
   scanType: string;
   uploadDate: string;
   url: string;

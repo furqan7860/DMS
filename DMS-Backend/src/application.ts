@@ -68,7 +68,6 @@ export class TodoListApplication extends BootMixin(
     this.repository(ScanRepository)
     this.repository(CaseRepository)
     // ------------- END OF SNIPPET -------------
-    this.exportOpenApiSpec();
     //new
     this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
   }

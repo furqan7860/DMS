@@ -10,8 +10,8 @@ export class CaseRepository extends DefaultCrudRepository<
   typeof Case.prototype.id,
   CaseRelations
 > {
-  public readonly patient: BelongsToAccessor<Patient, typeof Case.prototype.id>;
-  public readonly user: BelongsToAccessor<User, typeof Case.prototype.id>;
+  public readonly patientId: BelongsToAccessor<Patient, typeof Case.prototype.id>;
+  public readonly userId: BelongsToAccessor<User, typeof Case.prototype.id>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
@@ -22,10 +22,10 @@ export class CaseRepository extends DefaultCrudRepository<
   ) {
     super(Case, dataSource);
 
-    this.patient = this.createBelongsToAccessorFor('patient', patientRepositoryGetter);
-    this.registerInclusionResolver('patient', this.patient.inclusionResolver);
+    this.patientId = this.createBelongsToAccessorFor('patient', patientRepositoryGetter);
+    this.registerInclusionResolver('patient', this.patientId.inclusionResolver);
 
-    this.user = this.createBelongsToAccessorFor('user', userRepositoryGetter);
-    this.registerInclusionResolver('user', this.user.inclusionResolver);
+    this.userId = this.createBelongsToAccessorFor('user', userRepositoryGetter);
+    this.registerInclusionResolver('user', this.userId.inclusionResolver);
   }
 }

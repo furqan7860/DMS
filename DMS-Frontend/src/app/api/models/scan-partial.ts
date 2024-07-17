@@ -5,8 +5,9 @@
  * (tsType: Partial<Scan>, schemaOptions: { partial: true })
  */
 export interface ScanPartial {
+  caseId?: number;
   id?: number;
-  patientId?: string;
+  patientId?: number;
   scanType?: string;
   uploadDate?: string;
   url?: string;

@@ -1,5 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
+import { PatientWithRelations } from '../models/patient-with-relations';
+import { UserWithRelations } from '../models/user-with-relations';
 
 /**
  * (tsType: CaseWithRelations, schemaOptions: { includeRelations: true })
@@ -11,7 +13,9 @@ export interface CaseWithRelations {
   foreignKey?: any;
   id?: number;
   notes?: string;
-  patient?: string;
+  patient?: PatientWithRelations;
+  patientId?: number;
   urgent?: boolean;
-  user?: string;
+  user?: UserWithRelations;
+  userId?: string;
 }

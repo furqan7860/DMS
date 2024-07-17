@@ -55,42 +55,48 @@
 	<p-confirmDialog [style]="{ width: '40rem' }"></p-confirmDialog>
 </div>
 
+<p-dialog header="Add Doctor" [draggable]="false" [modal]="true" [(visible)]="visible" [style]="{ width: '60rem' }">
 <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
-	<div class="card flex justify-content-center">
-		<p-dialog header="Add Doctor" [modal]="true" [(visible)]="visible" [style]="{ width: '60rem' }">
+	<div class="flex flex-column justify-content-center">
 			<span class="p-text-secondary block mb-5">Add your information.</span>
-			<div class="flex align-items-center gap-3 mb-5">
+			<div class="flex align-items-start gap-3 mb-3">
 				<label for="username" class="font-semibold w-6rem">Username</label>
+				<div class="flex flex-column flex-grow-1 align-items-start">
 				<input autocomplete="one-time-code" formControlName="username" pInputText id="username"
-					class="flex-auto" />
-			</div>
-			<div *ngIf="doctorForm.get('username')?.touched && doctorForm.get('username')?.errors"
-				class="p-error ml-8 mb-2">
-				<div *ngIf="doctorForm.get('username')?.errors.required">Username is required</div>
+					class="w-full" />
+					<div *ngIf="doctorForm.get('username')?.touched && doctorForm.get('username')?.errors"
+						class="p-error mb-2">
+						<div *ngIf="doctorForm.get('username')?.errors.required">Username is required</div>
+					</div>
+				</div>
 			</div>
 
-			<div class="flex align-items-center gap-3 mb-5">
+			<div class="flex align-items-start gap-3 mb-3">
 				<label for="email" class="font-semibold w-6rem">Email</label>
-				<input autocomplete="one-time-code" formControlName="email" pInputText id="email" class="flex-auto" />
+				<div class="flex flex-column flex-grow-1 align-items-start">
+				<input autocomplete="one-time-code" formControlName="email" pInputText id="email" class="w-full" />
+				<div *ngIf="doctorForm.get('email')?.touched && doctorForm.get('email')?.errors" class="p-error mb-2">
+					<div *ngIf="doctorForm.get('email')?.errors.required">Email is required</div>
+					<div *ngIf="doctorForm.get('email')?.errors.pattern">Email must be a valid email address</div>
+				</div>
 			</div>
-			<div *ngIf="doctorForm.get('email')?.touched && doctorForm.get('email')?.errors" class="p-error ml-8 mb-2">
-				<div *ngIf="doctorForm.get('email')?.errors.required">Email is required</div>
-				<div *ngIf="doctorForm.get('email')?.errors.pattern">Email must be a valid email address</div>
 			</div>
 
-			<div class="flex align-items-center gap-3 mb-5">
+			<div class="flex align-items-start gap-3 mb-3">
 				<label for="password" class="font-semibold w-6rem">Password</label>
-				<input type="password" [ngStyle]="{ 'background': editMode ? '#dddddd' : '' }" [readOnly]="editMode"
-					formControlName="password" pInputText id="password" class="flex-auto" />
-			</div>
-			<div *ngIf="doctorForm.get('password')?.touched && doctorForm.get('password')?.errors"
-				class="p-error ml-8 mb-2">
-				<div *ngIf="doctorForm.get('password')?.errors.required">Password is required</div>
+				<div class="flex flex-column flex-grow-1 align-items-start">
+					<input type="password" [ngStyle]="{ 'background': editMode ? '#dddddd' : '' }" [readOnly]="editMode"
+					formControlName="password" pInputText id="password" class="w-full" />
+					<div *ngIf="doctorForm.get('password')?.touched && doctorForm.get('password')?.errors"
+						class="p-error mb-2">
+						<div *ngIf="doctorForm.get('password')?.errors.required">Password is required</div>
+					</div>
+				</div>
 			</div>
 
-			<div class="flex align-items-center gap-3 mb-5">
+			<div class="flex align-items-start gap-4 mb-3">
 				<label for="role" class="font-semibold w-6rem">Role</label>
-				<input formControlName="role" pInputText id="role" class="flex-auto" [readOnly]="true"
+				<input formControlName="role" pInputText id="role" class="w-full" [readOnly]="true"
 					style="background: #dddddd" />
 			</div>
 
@@ -104,6 +110,6 @@
 				<button pButton type="submit" label="Save" class="p-button-primary"
 					[disabled]="doctorForm.invalid"></button>
 			</div>
-		</p-dialog>
-	</div>
-</form>
+		</div>
+	</form>
+</p-dialog>

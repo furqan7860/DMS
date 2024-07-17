@@ -10,7 +10,7 @@ export interface CasePartial {
   delivery_date?: string;
   id?: number;
   notes?: string;
-  patient?: string;
+  patientId?: number;
   urgent?: boolean;
-  user?: string;
+  userId?: string;
 }
