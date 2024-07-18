@@ -1,0 +1,159 @@
+<div class="p-grid p-align-center p-m-4">
+    <div class="grid">
+        <div class="col-12 md:col-6">
+            <div class="p-col-12 p-md-4 p-p-2 mb-5">
+                <p-card>
+                    <div class="p-fluid">
+                        <h3>Case Details</h3>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="caseType">Case Type: </label>
+                            <span id="caseType">{{ case.case_type }}</span>
+                        </div>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="deliveryDate">Delivery Date: </label>
+                            <span id="deliveryDate">{{ case.delivery_date | date }}</span>
+                        </div>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="urgent">Urgent: </label>
+                            <span id="urgent">{{ case.urgent ? 'Yes' : 'No' }}</span>
+                        </div>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="notes">Notes: </label>
+                            <span id="notes">{{ case.notes }}</span>
+                        </div>
+                        <div class="p-field flex">
+                            <div class="col-4 px-0">
+                                <button pButton label="Edit Case" icon="pi pi-pencil"
+                                    (click)="showCaseDialog()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="p-col-12 p-md-4 p-p-2 mb-5">
+                <p-card>
+                    <div class="p-fluid">
+                        <h3>Patient Details</h3>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="patientName">Name: </label>
+                            <span id="patientName">{{ patient.name }}</span>
+                        </div>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="age">Age: </label>
+                            <span id="age">{{ patient.age }}</span>
+                        </div>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="gender">Gender: </label>
+                            <span id="gender">{{ patient.gender || 'Not Specified' }}</span>
+                        </div>
+                        <div class="p-field flex gap-3 mb-3">
+                            <label for="patientNotes">Notes: </label>
+                            <span id="patientNotes">{{ patient.notes }}</span>
+                        </div>
+                        <div class="p-field flex gap-3">
+                            <div class="col-6 px-0">
+                                <button pButton label="Edit Patient" icon="pi pi-pencil"
+                                    (click)="showPatientDialog()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-col-12 p-md-4 p-p-2">
+        <p-card>
+            <p-header>
+                <h3>Scan Documents</h3>
+            </p-header>
+            <div class="p-fluid">
+                <div class="flex justify-content-end">
+                    <button pButton [style.width]="'200px'" label="Upload New Scan" icon="pi pi-upload" (click)="uploadNewScan()"></button>
+                </div>
+                <p-table [value]="case.scan" [paginator]="true" [rows]="10">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Scan ID</th>
+                            <th>Upload Date</th>
+                            <th>Uploaded By</th>
+                            <th>Download</th>
+                            <th>Delete</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-scan>
+                        <tr>
+                            <td>{{ scan.id }}</td>
+                            <td>{{ scan.uploadDate | date }}</td>
+                            <td>{{ scan.user.username }}</td>
+                            <td>
+                                <button class="p-button-rounded" pButton icon="pi pi-download"></button>
+                            </td>
+                            <td>
+                                <button class="p-button-rounded" pButton icon="pi pi-trash"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </p-card>
+    </div>
+
+    <!-- Case Edit Dialog -->
+    <p-dialog header="Edit Case" [draggable]="false" [(visible)]="caseDialog" [modal]="true" [style]="{width: '500px'}"
+        [responsive]="true">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-6">
+                <label for="caseType">Case Type</label>
+                <input id="caseType" type="text" pInputText [(ngModel)]="case.case_type" required />
+                <small *ngIf="!case.case_type" class="p-error">Case type is required.</small>
+            </div>
+            <div class="p-field p-col-12 p-md-6">
+                <label for="deliveryDate">Delivery Date</label>
+                <input id="deliveryDate" type="date" pInputText [(ngModel)]="case.delivery_date" required />
+                <small *ngIf="!case.delivery_date" class="p-error">Delivery date is required.</small>
+            </div>
+            <div class="p-field p-col-12 p-md-6">
+                <label for="urgent">Urgent</label>
+                <p-inputSwitch id="urgent" [(ngModel)]="case.urgent"></p-inputSwitch>
+            </div>
+            <div class="p-field p-col-12">
+                <label for="notes">Notes</label>
+                <textarea id="notes" pInputTextarea [(ngModel)]="case.notes"></textarea>
+            </div>
+            <div class="p-field p-col-12">
+                <button pButton label="Save" icon="pi pi-check" (click)="saveCase()"></button>
+            </div>
+        </div>
+    </p-dialog>
+
+    <!-- Patient Edit Dialog -->
+    <p-dialog header="Edit Patient" [draggable]="false" [(visible)]="patientDialog" [modal]="true"
+        [style]="{width: '500px'}" [responsive]="true">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-6">
+                <label for="patientName">Name</label>
+                <input id="patientName" type="text" pInputText [(ngModel)]="patient.name" required />
+                <small *ngIf="!patient.name" class="p-error">Name is required.</small>
+            </div>
+            <div class="p-field p-col-12 p-md-6">
+                <label for="age">Age</label>
+                <input id="age" type="number" pInputText [(ngModel)]="patient.age" required />
+                <small *ngIf="!patient.age" class="p-error">Age is required.</small>
+            </div>
+            <div class="p-field p-col-12 p-md-6">
+                <label for="gender">Gender</label>
+                <input id="gender" type="text" pInputText [(ngModel)]="patient.gender" />
+            </div>
+            <div class="p-field p-col-12">
+                <label for="patientNotes">Notes</label>
+                <textarea id="patientNotes" pInputTextarea [(ngModel)]="patient.notes"></textarea>
+            </div>
+            <div class="p-field p-col-12">
+                <button pButton label="Save" icon="pi pi-check" (click)="savePatient()"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

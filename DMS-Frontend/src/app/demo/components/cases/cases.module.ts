@@ -28,6 +28,10 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CaseViewComponent } from './case-view/case-view.component';
+import { DialogModule } from 'primeng/dialog';
 @NgModule({
     imports: [
         CommonModule,
@@ -57,15 +61,20 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         InputTextareaModule,
         InputSwitchModule,
         CalendarModule,
+        BlockUIModule,
+        ProgressSpinnerModule,
+        DialogModule,
         RouterModule.forChild([
             { path: 'list', component: CaseListComponent },
             { path: 'add', component: CaseManagementComponent },
             { path: 'edit/:id', component: CaseManagementComponent },
+            { path: 'view/:id', component: CaseViewComponent },
         ] as Routes)
     ],
     declarations: [
         CaseManagementComponent,
-        CaseListComponent
+        CaseListComponent,
+        CaseViewComponent
     ],
     providers: [
         ConfirmationService

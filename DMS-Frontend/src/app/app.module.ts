@@ -10,20 +10,12 @@ import { EventService } from './demo/service/event.service';
 import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
-import { AngularFireModule } from '@angular/fire/compat';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorService } from './interceptor/http-interceptor';
 import { CasesService } from './demo/service/cases.service';
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [AppRoutingModule, AppLayoutModule, AngularFireModule.initializeApp({
-            apiKey: "AIzaSyDTaUNGHgSR3H1ymEq2GeTW9DJPP_iUAZg",
-            authDomain: "lifting-ledger.firebaseapp.com",
-            projectId: "lifting-ledger",
-            storageBucket: "lifting-ledger.appspot.com",
-            messagingSenderId: "392208292289",
-            appId: "1:392208292289:web:8227883d6c5cca87117740"
-    })],
+    imports: [AppRoutingModule, AppLayoutModule],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService, CasesService, EventService, IconService, NodeService,

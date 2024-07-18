@@ -6,9 +6,9 @@
  */
 export interface ScanPartial {
   caseId?: number;
+  filename?: string;
   id?: number;
   patientId?: number;
-  scanType?: string;
   uploadDate?: string;
   url?: string;
   userId?: string;

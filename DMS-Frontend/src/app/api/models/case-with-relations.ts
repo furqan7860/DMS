@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import { PatientWithRelations } from '../models/patient-with-relations';
+import { ScanWithRelations } from '../models/scan-with-relations';
 import { UserWithRelations } from '../models/user-with-relations';
 
 /**
@@ -15,6 +16,7 @@ export interface CaseWithRelations {
   notes?: string;
   patient?: PatientWithRelations;
   patientId?: number;
+  scan?: Array<ScanWithRelations>;
   urgent?: boolean;
   user?: UserWithRelations;
   userId?: string;

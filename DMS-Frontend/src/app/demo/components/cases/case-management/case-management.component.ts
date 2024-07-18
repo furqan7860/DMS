@@ -1,15 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Case, Patient, Scan } from 'src/app/api/models';
 import {
     CaseControllerService,
     PatientControllerControllerService,
     ScanControllerService,
 } from 'src/app/api/services';
-import {
-    FileUpload,
-    ImageUploadService,
-} from 'src/app/demo/service/file-upload.service';
 
 @Component({
     selector: 'app-case-management',
@@ -36,13 +33,14 @@ export class CaseManagementComponent {
     selectedCaseType = null;
 
     uploadedFiles: any = [];
+    loading= false;
 
     constructor(
-        private imageUploadService: ImageUploadService,
         private patientService: PatientControllerControllerService,
         private caseSevice: CaseControllerService,
         private scanService: ScanControllerService,
-        private http: HttpClient
+        private http: HttpClient,
+        private router: Router
     ) {}
 
     isCaseTypeValid(): boolean {
@@ -57,21 +55,19 @@ export class CaseManagementComponent {
         for (let file of event.files) {
             this.uploadedFiles.push(file);
         }
-        this.uploadedFiles.forEach((file) => {
-            console.log('file: ', file);
-            const formData = new FormData();
-            formData.append("file", file);
-            this.http.post('http://localhost:3000/upload', formData).subscribe({
-                next: (res) => {
-                    console.log('res: ', res);
+        // this.uploadedFiles.forEach((file) => {
+        //     const formData = new FormData();
+        //     formData.append("file", file);
+        //     this.http.post('http://localhost:3000/upload', formData).subscribe({
+        //         next: (res) => {
+        //             console.log('res: ', res);
+        //         },
+        //         error: (err) => {
+        //             console.log('err: ', err);
 
-                },
-                error: (err) => {
-                    console.log('err: ', err);
-
-                }
-            })
-        });
+        //         }
+        //     })
+        // });
     }
 
     onRemove(event: any) {
@@ -83,41 +79,45 @@ export class CaseManagementComponent {
     uploadScans(patientId, caseId) {
         return new Promise((resolve, reject) => {
             const uploadPromises = this.uploadedFiles.map((file) => {
-                file = new FileUpload(file[0]);
-                if (file.file) {
-                    return this.imageUploadService.uploadFile(file).then(
-                        (url) => {
-                            this.scans.push({
-                                url: url,
-                                uploadDate: new Date().toUTCString(),
-                                userId: JSON.parse(localStorage.getItem('user'))?.id,
-                                patientId: patientId,
-                                caseId: caseId,
-                            });
-                        }
-                    );
+                const formData = new FormData();
+                formData.append('file', file);
+                if (file) {
+                    return this.http
+                        .post('http://localhost:3000/upload', formData)
+                        .toPromise()
+                        .then((url: any) => {
+                            if (url.imageUrl) {
+                                this.scans.push({
+                                    filename: file.filename,
+                                    url: url.imageUrl,
+                                    uploadDate: new Date(),
+                                    userId: JSON.parse(
+                                        localStorage.getItem('user')
+                                    )?.id,
+                                    patientId: patientId,
+                                    caseId: caseId,
+                                });
+                            }
+                        });
                 } else {
                     return Promise.resolve(); // If no file, resolve immediately
                 }
             });
-    
+
             Promise.all(uploadPromises)
                 .then(() => resolve(true))
                 .catch((error) => reject(error));
         });
     }
-    
 
     prev() {
         this.activeIndex--;
     }
 
     next() {
-        if (this.activeIndex == 1) {
-            this.uploadedFiles = this.uploadedFiles.filter(
-                (file) => file.size > 2000
-            );
-        }
+        this.uploadedFiles = this.uploadedFiles.filter(
+            (file) => file.size < 50e5
+        );
 
         if (this.activeIndex < 2) {
             this.activeIndex++;
@@ -127,6 +127,7 @@ export class CaseManagementComponent {
     }
 
     submit() {
+        this.loading = true;
         this.patient = {
             ...this.patient,
             userId: JSON.parse(localStorage.getItem('user'))?.id,
@@ -143,19 +144,13 @@ export class CaseManagementComponent {
                 this.caseSevice
                     .create({ body: this.case })
                     .subscribe((acase) => {
-
-                                this.scanService.create({
-                                    body: {
-                                        url: "https://imgs.search.brave.com/hZHEvqRyP7AWIbCTJyi24bNFQSIaCVP5m6Zpl3-Vwds/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTcy/MjU2Njg4L3Bob3Rv/L2xhaG9yZS1wYWtp/c3Rhbi1zdW5yaXNl/LWJhZHNoYWhpLW1v/c3F1ZS5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9THNJaVZn/ZThUUU5qMWFkVHc1/TW1hRUttOWtZWE8t/eldXUjlsc0t3a0NY/Zz0",
-                                        patientId: patient.id,
-                                        caseId: acase.id,
-                                        uploadDate: new Date().toISOString(),
-                                        userId: JSON.parse(localStorage.getItem('user'))?.id,
-                                        scanType: 'png'
-                                    }
-                                }as any).subscribe();
-                            // })
-                        // })
+                        this.uploadScans(patient.id, acase.id).then((res) => {
+                            this.scans.forEach((scan) => {
+                                this.scanService.create({body: scan}).subscribe();
+                            });
+                            this.loading = false;
+                            this.router.navigate(['/case/list']);
+                        });
                     });
             });
     }

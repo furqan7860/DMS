@@ -10,11 +10,11 @@ import { UserWithRelations } from '../models/user-with-relations';
 export interface ScanWithRelations {
   case?: CaseWithRelations;
   caseId?: number;
+  filename?: string;
   foreignKey?: any;
   id?: number;
   patient?: PatientWithRelations;
   patientId?: number;
-  scanType: string;
   uploadDate: string;
   url: string;
   user?: UserWithRelations;

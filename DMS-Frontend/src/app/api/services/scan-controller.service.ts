@@ -15,6 +15,8 @@ import { create } from '../fn/scan-controller/create';
 import { Create$Params } from '../fn/scan-controller/create';
 import { deleteById } from '../fn/scan-controller/delete-by-id';
 import { DeleteById$Params } from '../fn/scan-controller/delete-by-id';
+import { fileUpload } from '../fn/scan-controller/file-upload';
+import { FileUpload$Params } from '../fn/scan-controller/file-upload';
 import { find } from '../fn/scan-controller/find';
 import { Find$Params } from '../fn/scan-controller/find';
 import { findById } from '../fn/scan-controller/find-by-id';
@@ -232,6 +234,35 @@ export class ScanControllerService extends BaseService {
   updateAll(params?: UpdateAll$Params, context?: HttpContext): Observable<LoopbackCount> {
     return this.updateAll$Response(params, context).pipe(
       map((r: StrictHttpResponse<LoopbackCount>): LoopbackCount => r.body)
+    );
+  }
+
+  /** Path part for operation `scanControllerFileUpload()` */
+  static readonly ScanControllerFileUploadPath = '/upload';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `fileUpload()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  fileUpload$Response(params: FileUpload$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return fileUpload(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `fileUpload$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  fileUpload(params: FileUpload$Params, context?: HttpContext): Observable<{
+}> {
+    return this.fileUpload$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
     );
   }
 

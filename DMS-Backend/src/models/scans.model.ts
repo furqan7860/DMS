@@ -15,8 +15,16 @@ export class Scan extends Entity {
   @property({
     type: 'string',
     required: true,
+    mysql: {
+      dataType: 'LONGTEXT',
+    },
   })
   url: string;
+
+  @property({
+    type: 'string',
+  })
+  filename: string;
 
   @property({
     type: 'date',

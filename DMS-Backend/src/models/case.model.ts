@@ -1,8 +1,9 @@
 
 
-import { Entity, model, property, hasOne, belongsTo } from '@loopback/repository';
+import { Entity, model, property, hasOne, belongsTo, hasMany } from '@loopback/repository';
 import { Patient } from './patient.model';
 import { User } from './user.model';
+import { Scan } from './scans.model';
 
 @model()
 export class Case extends Entity {
@@ -43,6 +44,9 @@ export class Case extends Entity {
   @belongsTo(() => User)
   userId: string;
 
+  @hasMany(() => Scan)
+  scan: Scan[];
+
   constructor(data?: Partial<Case>) {
     super(data);
   }
@@ -51,6 +55,7 @@ export class Case extends Entity {
 export interface CaseRelations {
   userId: User;
   patientId: Patient;
+  scan: Scan
 }
 
 export type CaseWithRelations = Case & CaseRelations;

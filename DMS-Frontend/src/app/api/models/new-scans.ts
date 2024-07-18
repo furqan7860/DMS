@@ -6,8 +6,8 @@
  */
 export interface NewScans {
   caseId?: number;
+  filename?: string;
   patientId?: number;
-  scanType: string;
   uploadDate: string;
   url: string;
   userId?: string;

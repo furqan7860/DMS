@@ -1,4 +1,4 @@
-<div class="p-grid p-align-center p-justify-center">
+<div #pnl class="p-grid p-align-center p-justify-center">
   <div class="p-col-12 p-md-6">
     <p-steps [model]="items" [(activeIndex)]="activeIndex"></p-steps>
 
@@ -104,7 +104,7 @@
                     </p>
                   </div>
 
-                  <p-fileUpload [maxFileSize]="2000000" id="scans" name="scans" (onRemove)="onRemove($event)"
+                  <p-fileUpload [maxFileSize]="5000000" id="scans" name="scans" (onRemove)="onRemove($event)"
                     (onSelect)="onFileSelect($event)" mode="advanced" auto="true" multiple="true" required>
                     <ng-template pTemplate="content" (onSelect)="onFileSelect($event)">
                       <div class="custom-upload-area">
@@ -210,3 +210,6 @@
     </p-card>
   </div>
 </div>
+<p-blockUI [target]="pnl" [blocked]="loading">
+  <p-progressSpinner ariaLabel="loading" />
+</p-blockUI>

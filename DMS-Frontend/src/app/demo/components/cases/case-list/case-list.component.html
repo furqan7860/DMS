@@ -14,48 +14,43 @@
 		  </ng-template>
 		  <ng-template pTemplate="header">
 			<tr>
-			  <th style="min-width: 12rem">
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Case ID
 				</div>
 			  </th>
-			  <th style="min-width: 12rem">
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Case Type
-				  <p-columnFilter type="text" field="case_type" display="menu" placeholder="Search by case type"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 12rem">
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Patient Name
-				  <p-columnFilter type="text" field="patient" display="menu" placeholder="Search by patient"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 12rem">
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Created By
-				  <p-columnFilter type="text" field="user" display="menu" placeholder="Search by user"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 12rem">
+			  <!-- <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Delivery Date
 				  <p-columnFilter type="date" field="delivery_date" display="menu" placeholder="mm/dd/yyyy"></p-columnFilter>
 				</div>
-			  </th>
-			  <th style="min-width: 12rem">
+			  </th> -->
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
-				  Urgent
-				  <p-columnFilter type="boolean" field="urgent" display="menu"></p-columnFilter>
+				  Urgent/Delivery Date
 				</div>
 			  </th>
-			  <th style="min-width: 12rem">
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Notes
-				  <p-columnFilter type="text" field="notes" display="menu" placeholder="Search by notes"></p-columnFilter>
 				</div>
 			  </th>
-			  <th style="min-width: 12rem">
+			  <th style="min-width: 6rem">
 				<div class="flex justify-content-between align-items-center">
 				  Actions
 				</div>
@@ -76,18 +71,18 @@
 			  <td>
 				{{case.user?.username}}
 			  </td>
-			  <td>
+			  <!-- <td>
 				{{case.delivery_date | date: 'MM/dd/yyyy'}}
-			  </td>
+			  </td> -->
 			  <td>
-				<span [class]="case.urgent ? 'text-red-500' : 'text-green-500'">{{case.urgent ? 'Yes' : 'No'}}</span>
+				<span [class]="case.urgent ? 'text-red-500' : 'text-green-500'">{{case.urgent ? 'Yes' : case.delivery_date}}</span>
 			  </td>
 			  <td>
 				{{case.notes}}
 			  </td>
-			  <td>
-				<button pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success"></button>
-				<button pButton type="button" icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDeleteCase(case)"></button>
+			  <td class="flex gap-1">
+				<button pButton type="button" icon="pi pi-eye" routerLink="/case/view/{{case.id}}" class="p-button-rounded p-button-success"></button>
+				<!-- <button pButton type="button" icon="pi pi-edit" class="p-button-rounded p-button-danger" (click)="confirmDeleteCase(case)"></button> -->
 			  </td>
 			</tr>
 		  </ng-template>
