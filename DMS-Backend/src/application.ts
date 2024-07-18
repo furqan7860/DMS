@@ -14,7 +14,7 @@ import {
 import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
 import { RepositoryMixin } from '@loopback/repository';
-import { RestApplication } from '@loopback/rest';
+import { RequestBodyParserOptions, RestApplication, RestBindings } from '@loopback/rest';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
@@ -25,6 +25,7 @@ import { DbDataSource } from './datasources';
 import { MySequence } from './sequence';
 import { PatientHistoryRepository, PatientRepository, ScanRepository } from './repositories';
 import { CaseRepository } from './repositories/case.repository';
+import { FileUploadController } from './controllers';
 export { ApplicationConfig };
 
 export class TodoListApplication extends BootMixin(
@@ -70,5 +71,11 @@ export class TodoListApplication extends BootMixin(
     // ------------- END OF SNIPPET -------------
     //new
     this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
+    this.bind(RestBindings.REQUEST_BODY_PARSER_OPTIONS).to({
+      validation: {
+        forbiddenKeys: ['_csrf'],
+        ajvKeywords: ['range', 'regexp'],
+      },
+    } as RequestBodyParserOptions);
   }
 }

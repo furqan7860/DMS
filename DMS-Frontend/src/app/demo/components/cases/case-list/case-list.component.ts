@@ -31,9 +31,21 @@ export class CaseListComponent implements OnInit {
     }
 
     getCaseList() {
+        let where:any = {};
+        if (JSON.parse(localStorage.getItem('user'))?.role === 'Doctor') {
+            where = {
+                userId: JSON.parse(localStorage.getItem('user'))?.id
+            }
+        }
         const filter = {
             include: [
-                { relation: 'patient' },
+                { 
+                    relation: 'patient',
+                    include: [
+                        {relation: 'scan'}
+                    ]
+                
+                 },
                 {
                     relation: 'user',
                     scope: {
@@ -43,6 +55,7 @@ export class CaseListComponent implements OnInit {
                     },
                 },
             ],
+            where
         };
         this.caseController
             .find({ filter: JSON.stringify(filter) })

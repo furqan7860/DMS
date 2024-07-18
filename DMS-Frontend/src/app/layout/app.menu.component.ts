@@ -15,21 +15,21 @@ export class AppMenuComponent implements OnInit {
         this.model = [
             {
                 label: 'Home',
-                roles: ['admin', 'doctor'],
+                roles: ['admin', 'Doctor'],
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
                 ]
             },
             {
                 label: 'Patient Management',
-                roles: ['admin', 'doctor'],
+                roles: ['admin', 'Doctor'],
                 items: [
                     { label: 'Cases', icon: 'pi pi-fw pi-briefcase', routerLink: ['/case/list'] }
                 ]
             },
             {
                 label: 'Doctor Management',
-                roles: ['admin', 'doctor'],
+                roles: ['admin'],
                 items: [
                     { label: 'Doctors', icon: 'pi pi-fw pi-briefcase', routerLink: ['/doctor/list'] }
                 ]
@@ -37,6 +37,7 @@ export class AppMenuComponent implements OnInit {
         ];
 
         const role = JSON.parse(localStorage.getItem('user'))?.role;
+        console.log('role: ', role);
         if(role) {
             this.model = this.model.filter((item) => item.roles?.includes(role));
         }

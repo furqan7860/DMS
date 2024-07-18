@@ -55,6 +55,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         ConfirmDialogModule,
         CheckboxModule,
         InputTextareaModule,
+        InputSwitchModule,
+        CalendarModule,
         RouterModule.forChild([
             { path: 'list', component: CaseListComponent },
             { path: 'add', component: CaseManagementComponent },

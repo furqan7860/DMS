@@ -11,7 +11,7 @@ export class PatientHistoryRepository extends DefaultCrudRepository<
   PatientHistoryRelations
 > {
   public readonly patient: BelongsToAccessor<Patient, typeof PatientHistory.prototype.id>;
-  public readonly user: BelongsToAccessor<User, typeof PatientHistory.prototype.id>;
+  public readonly updatedBy: BelongsToAccessor<User, typeof PatientHistory.prototype.id>;
 
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
@@ -25,7 +25,7 @@ export class PatientHistoryRepository extends DefaultCrudRepository<
     this.patient = this.createBelongsToAccessorFor('patient', patientRepositoryGetter);
     this.registerInclusionResolver('patient', this.patient.inclusionResolver);
 
-    this.user = this.createBelongsToAccessorFor('user', userRepositoryGetter);
-    this.registerInclusionResolver('user', this.user.inclusionResolver);
+    this.updatedBy = this.createBelongsToAccessorFor('user', userRepositoryGetter);
+    this.registerInclusionResolver('user', this.updatedBy.inclusionResolver);
   }
 }

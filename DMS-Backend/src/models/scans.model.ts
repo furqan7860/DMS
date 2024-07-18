@@ -16,12 +16,6 @@ export class Scan extends Entity {
     type: 'string',
     required: true,
   })
-  scanType: string;  // E.g., 'MRI', 'PDF', 'Image'
-
-  @property({
-    type: 'string',
-    required: true,
-  })
   url: string;
 
   @property({
