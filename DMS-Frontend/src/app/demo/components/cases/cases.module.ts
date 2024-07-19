@@ -32,6 +32,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CaseViewComponent } from './case-view/case-view.component';
 import { DialogModule } from 'primeng/dialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
 @NgModule({
     imports: [
         CommonModule,
@@ -62,6 +63,7 @@ import { DialogModule } from 'primeng/dialog';
         InputSwitchModule,
         CalendarModule,
         BlockUIModule,
+        RadioButtonModule,
         ProgressSpinnerModule,
         DialogModule,
         RouterModule.forChild([
