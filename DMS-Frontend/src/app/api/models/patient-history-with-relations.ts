@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+import { CaseWithRelations } from '../models/case-with-relations';
 import { PatientWithRelations } from '../models/patient-with-relations';
 import { UserWithRelations } from '../models/user-with-relations';
 
@@ -9,11 +10,13 @@ import { UserWithRelations } from '../models/user-with-relations';
 export interface PatientHistoryWithRelations {
   actionDate: string;
   actionType: string;
+  case?: CaseWithRelations;
+  caseId?: number;
   details?: string;
   foreignKey?: any;
   id?: number;
   patient?: PatientWithRelations;
-  patientId?: string;
+  patientId?: number;
   user?: UserWithRelations;
   userId?: string;
 }

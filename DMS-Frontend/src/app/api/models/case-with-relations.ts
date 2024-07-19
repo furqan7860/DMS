@@ -8,6 +8,7 @@ import { UserWithRelations } from '../models/user-with-relations';
  * (tsType: CaseWithRelations, schemaOptions: { includeRelations: true })
  */
 export interface CaseWithRelations {
+  case_status?: string;
   case_type?: string;
   deleted?: boolean;
   delivery_date?: string;
@@ -16,6 +17,7 @@ export interface CaseWithRelations {
   notes?: string;
   patient?: PatientWithRelations;
   patientId?: number;
+  payment_status?: string;
   scan?: Array<ScanWithRelations>;
   urgent?: boolean;
   user?: UserWithRelations;

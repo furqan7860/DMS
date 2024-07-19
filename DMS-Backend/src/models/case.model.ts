@@ -28,10 +28,21 @@ export class Case extends Entity {
     type: 'boolean',
   })
   urgent: boolean;
+
   @property({
     type: 'string',
   })
   notes: string;
+
+  @property({
+    type: 'string',
+  })
+  case_status: string;
+
+  @property({
+    type: 'string',
+  })
+  payment_status: string;
 
   @property({
     type: 'boolean',

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
@@ -18,12 +19,20 @@ export class CaseListComponent implements OnInit {
     cases: Case[] = [];
     selectedCases: Case[] = [];
     loading: boolean = true;
+    admin = false;
+    case_status:any = [{
+        label: 'Recieved',
+        value: 'recieved'
+    }, {
+        label: 'Completed',
+        value: 'completed'
+    }]
 
     constructor(
         private patientController: PatientControllerControllerService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private caseController: CaseControllerService
+        private caseController: CaseControllerService,
     ) {}
 
     ngOnInit() {
@@ -32,7 +41,8 @@ export class CaseListComponent implements OnInit {
 
     getCaseList() {
         let where:any = {};
-        if (JSON.parse(localStorage.getItem('user'))?.role === 'Doctor') {
+        this.admin = JSON.parse(localStorage.getItem('user'))?.role === 'admin';
+        if (!this.admin) {
             where = {
                 userId: JSON.parse(localStorage.getItem('user'))?.id
             }
@@ -113,5 +123,32 @@ export class CaseListComponent implements OnInit {
 
     cancelDelete() {
         this.messageService.clear('confirmDelete');
+    }
+
+    getCaseStatus(status) {
+        return this.case_status.find((a) => a.value == status) || 'In Progress';
+    }
+
+    updateCaseStatus(selectedCase) {
+        const _case = { ...selectedCase };
+        Object.keys(selectedCase).forEach(key => {
+            if (selectedCase[key] ==  null) {
+                _case[key] = '';
+            }
+        })
+        delete _case.user;
+        delete _case.patient;
+        if (_case.urgent == null || _case.urgent == "" ) {
+            _case.urgent = false;
+        };
+        if (_case.deleted == null || _case.deleted == "") {
+            _case.deleted = false;
+        }
+        this.caseController.updateById({
+            id: _case.id,
+            body: {
+                ..._case
+            }
+        }).subscribe();
     }
 }

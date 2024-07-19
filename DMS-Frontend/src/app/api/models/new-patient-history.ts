@@ -7,8 +7,9 @@
 export interface NewPatientHistory {
   actionDate: string;
   actionType: string;
+  caseId?: number;
   details?: string;
   id?: number;
-  patientId?: string;
+  patientId?: number;
   userId?: string;
 }

@@ -4,7 +4,10 @@ import { Product } from '../../api/product';
 import { ProductService } from '../../service/product.service';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { PatientControllerControllerService } from 'src/app/api/services';
+import {
+    CaseControllerService,
+    PatientControllerControllerService,
+} from 'src/app/api/services';
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -12,13 +15,11 @@ import { PatientControllerControllerService } from 'src/app/api/services';
 export class DashboardComponent implements OnInit, OnDestroy {
     subscription!: Subscription;
     totalPatients = 0;
-    constructor(private pateintControllerService: PatientControllerControllerService) {
-
-    }
+    constructor(private caseController: CaseControllerService) {}
 
     ngOnInit() {
         const { role, id } = JSON.parse(localStorage.getItem('user')) || {};
-        this.getCasesCount(role, id)
+        this.getCasesCount(role, id);
     }
 
     getCasesCount(role, id) {
@@ -26,13 +27,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (role == 'admin') {
             filter = {};
         } else {
-            filter['where'] = {
-                userId: id
-            }
+            filter = {
+                userId: id,
+            };
         }
-        this.pateintControllerService.count(filter).subscribe((res) => {
-            this.totalPatients = res.count;
-        });
+        this.caseController
+            .count({ where: JSON.stringify(filter) })
+            .subscribe((res) => {
+                this.totalPatients = res.count;
+            });
     }
 
     // getCasesClosedCount(role, id){
@@ -50,7 +53,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //     this.totalPatients = res.count;
     //    });
     // }
-
 
     ngOnDestroy() {
         if (this.subscription) {
