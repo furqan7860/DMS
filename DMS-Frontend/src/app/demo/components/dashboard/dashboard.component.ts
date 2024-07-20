@@ -18,8 +18,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     constructor(private caseController: CaseControllerService) {}
 
     ngOnInit() {
-        const { role, id } = JSON.parse(localStorage.getItem('user')) || {};
-        this.getCasesCount(role, id);
+        setTimeout(() => {
+            const { role, id } = JSON.parse(localStorage.getItem('user')) || {};
+            this.getCasesCount(role, id);
+        }, 1000)
     }
 
     getCasesCount(role, id) {

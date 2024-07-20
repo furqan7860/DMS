@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.userForm.invalid)
         if (this.userForm.invalid) return;
         this.userControllerService.login({body: this.userForm.value}).pipe(tap((data) => {
             if (data.token && data['role']) {
@@ -42,7 +41,6 @@ export class LoginComponent implements OnInit {
             });
         })
         , catchError((err:any) => {
-            console.log('err: ', err);
             alert('Invalid Credentials');
             localStorage.clear();
             throw err;

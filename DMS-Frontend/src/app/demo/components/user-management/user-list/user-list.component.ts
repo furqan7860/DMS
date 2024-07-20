@@ -38,7 +38,6 @@ export class UserListComponent implements OnInit {
     this.userControllerService.findAllUsers().subscribe({
       next: (res) => {
         this.doctorList = res.filter(doc => doc.role !== 'admin');
-        console.log('this.doctorList: ', this.doctorList);
       },
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch doctors' });

@@ -55,19 +55,6 @@ export class CaseManagementComponent {
         for (let file of event.files) {
             this.uploadedFiles.push(file);
         }
-        // this.uploadedFiles.forEach((file) => {
-        //     const formData = new FormData();
-        //     formData.append("file", file);
-        //     this.http.post('http://localhost:3000/upload', formData).subscribe({
-        //         next: (res) => {
-        //             console.log('res: ', res);
-        //         },
-        //         error: (err) => {
-        //             console.log('err: ', err);
-
-        //         }
-        //     })
-        // });
     }
 
     onRemove(event: any) {

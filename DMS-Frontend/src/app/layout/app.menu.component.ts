@@ -37,7 +37,6 @@ export class AppMenuComponent implements OnInit {
         ];
 
         const role = JSON.parse(localStorage.getItem('user'))?.role;
-        console.log('role: ', role);
         if(role) {
             this.model = this.model.filter((item) => item.roles?.includes(role));
         }

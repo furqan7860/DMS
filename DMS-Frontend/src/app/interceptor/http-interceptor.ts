@@ -26,12 +26,10 @@ export class HttpInterceptorService implements HttpInterceptor {
             const filterParam = params.get('filter');
             const filterObject = JSON.parse(decodeURIComponent(filterParam));
 
-            console.log(filterObject);
         }
 
         return next.handle(clonedRequest).pipe(
             tap((data) => {
-                console.log('data: ', data);
             })
         );
     }

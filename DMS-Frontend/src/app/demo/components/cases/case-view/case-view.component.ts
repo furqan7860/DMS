@@ -116,9 +116,7 @@ export class CaseViewComponent {
                     console.log('err: ', err);
                 },
             });
-            console.log('Case details saved:', this.case);
         } else {
-            console.log('Please fill all required fields.');
         }
     }
 
@@ -140,10 +138,8 @@ export class CaseViewComponent {
                     console.log('err: ', err);
                 },
             });
-            console.log('Patient details saved:', this.case.patient);
             this.patientDialog = false;
         } else {
-            console.log('Please fill all required fields.');
         }
     }
 
@@ -184,8 +180,6 @@ export class CaseViewComponent {
     }
 
     uploadNewScan() {
-        // Logic for uploading new scan
-        console.log('Upload new scan clicked');
     }
 
     downloadScan(url) {

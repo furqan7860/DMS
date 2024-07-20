@@ -42,7 +42,6 @@ export class AddUserComponent {
     this.caseInfo.scans = [];
 
     this.caseInfo.scans.push(files);
-    console.log(this.caseInfo.scans, "this.caseInfo.scans")
   }
 
   prev() {
